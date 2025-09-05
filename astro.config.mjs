@@ -7,6 +7,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   output: 'static',
-  site: "https://astro-resume-theme.netlify.app",
+  site: "https://kthrob.github.io",
   integrations: [tailwind(), icon(), mdx(), sitemap()]
 });
