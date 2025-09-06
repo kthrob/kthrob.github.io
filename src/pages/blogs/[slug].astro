@@ -38,7 +38,7 @@ const {Content} = await blog.render();
     <script>
         import { toggleMarkdownTheme } from "../../scripts/theme";
 
-        const theme = document.documentElement.dataset.theme;
+        const theme = document.documentElement.dataset.theme ?? "light";
 
         toggleMarkdownTheme(theme)
     </script>
