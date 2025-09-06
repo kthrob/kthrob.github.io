@@ -10,10 +10,10 @@ const { blog, isFirst } = Astro.props;
             <h2 class="text-2xl font-semibold group-hover:text-primary transition-colors pt-1">
                 {blog.data.title}
             </h2>
-            <time datetime={blog.datetime} class="block mt-3 text-sm text-offset">
+            <time datetime={blog.datetime} class="block mt-3 text-sm text-text-offset">
               {new Date(blog.data.datetime).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
-            <p class="text-offset mt-4 line-clamp-2">{blog.data.description}</p>
+            <p class="text-text-offset mt-4 line-clamp-2">{blog.data.description}</p>
         </div>
         {blog.data.image && (
             <div class="block w-full md:w-1/4 rounded-lg mt-4 lg:mt-1">

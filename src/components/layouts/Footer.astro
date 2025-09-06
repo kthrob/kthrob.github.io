@@ -16,20 +16,20 @@ import { menuItems, socialLinks } from "../../config/cv.json";
                 <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 xl:justify-end">
                     {menuItems.map(menu => (
                         <li>
-                            <a href={menu.link} title={menu.name} class="text-sm transition-all duration-300 hover:text-offset focus:text-offset">
+                            <a href={menu.link} title={menu.name} class="text-sm transition-all duration-300 hover:text-text-offset focus:text-text-offset">
                                 {menu.name}
                             </a>
                         </li>
                     ))}
                 </ul>
 
-                <div class="w-full h-px mt-8 mb-5 xl:w-px xl:m-0 xl:h-6 bg-border"></div>
+                <div class="w-full h-px mt-8 mb-5 xl:w-px xl:m-0 xl:h-6 bg-background-border"></div>
 
                 <ul class="flex items-center justify-center space-x-8 xl:justify-end">
                     {socialLinks.map(social => (
                         <li>
                             <a href={social.link} title={social.iconName} target="_blank" rel="noopener noreferrer"
-                               class="block transition-all duration-300 hover:text-offset focus:text-offset">
+                                class="block transition-all duration-300 hover:text-text-offset focus:text-text-offset">
                                 <Icon name={social.iconName} />
                             </a>
                         </li>
