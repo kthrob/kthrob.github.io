@@ -1,13 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/sections/Hero.astro';
+import Layout from '~/layouts/Layout.astro';
+import Hero from '~/components/sections/Hero.astro';
 import Portfolio from '~/sections/Portfolio.astro';
-import Resume from '../components/sections/Resume.astro';
+import Resume from '~/components/sections/Resume.astro';
+import Carousel from '~/components/sections/skills/Carousel.astro';
 
+import { logos } from '~/components/data/logos';
 ---
 
-<Layout title="Astro Resume Theme">
+<Layout title='Astro Resume Theme'>
 	<Hero />
-  <Portfolio />
+	<Carousel tools={logos} />
+	<Portfolio />
 	<Resume />
 </Layout>
