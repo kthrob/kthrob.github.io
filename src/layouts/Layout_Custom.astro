@@ -7,7 +7,6 @@ import CommonMeta from '~/components/common/CommonMeta.astro';
 import ApplyColorMode from '~/components/common/ApplyColorMode.astro';
 import Metadata from '~/components/common/Metadata.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
-// Comment the line below to disable View Transitions
 import { ClientRouter } from 'astro:transitions';
 import Header_Custom from '../components/layouts/Header_Custom.astro';
 import Footer from '../components/layouts/Footer.astro';
@@ -31,7 +30,6 @@ const { language, textDirection } = I18N;
 		<CommonMeta />
 		<ApplyColorMode />
 		<Metadata {...metadata} />
-		<!-- Comment the line below to disable View Transitions -->
 		<ClientRouter fallback='swap' />
 	</head>
 
