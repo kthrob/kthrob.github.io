@@ -1,4 +1,14 @@
 ---
+import { twMerge } from 'tailwind-merge';
+// import captureWebsite from 'capture-website';
+
+// await captureWebsite.file(
+// 	'https://bluffslittlethinkers.com',
+// 	'screenshot_blt.png',
+// 	{
+// 		emulateDevice: 'iPhone X'
+// 	}
+// );
 const {
 	title,
 	descripcion,
@@ -6,51 +16,82 @@ const {
 	skills,
 	repoURL,
 	demoURL,
-	averageBrightness,
+	averageBrightness
 } = Astro.props;
 
 // Generate a unique ID for this card instance
 const cardId = `portfolio-card-${Math.random().toString(36).substring(2, 11)}`;
+
+import { getAverageColor } from 'fast-average-color-node';
+
+const averageColor = await getAverageColor(imgSrc, {
+  mode: 'precision',
+  algorithm: 'simple',
+  ignoredColor: [ 255, 255, 255, 255 ],
+});
+console.log("averageColor", averageColor);
 ---
 
-<div class="group relative w-[332px] h-[246px] overflow-hidden rounded-xl bg-black" data-portfolio-card id={cardId}>
+<div
+	class='group relative w-[332px] h-[246px] overflow-hidden rounded-xl bg-red-400'
+	data-portfolio-card
+	id={cardId}>
 	<img
 		src={imgSrc}
 		alt={title}
-		crossorigin="anonymous"
+		crossorigin='anonymous'
 		height={130}
 		width={332}
-		loading="lazy"
+		loading='lazy'
 		average-brightness={averageBrightness}
-		class="object-cover object-[center_0] h-[160px] w-[332px] bg-black"
+		class='object-cover object-[center_0] h-[160px] w-[332px] bg-black'
 		data-portfolio-img
 	/>
 
-	<div class="absolute flex flex-col h-full w-full top-0 transition-all duration-[350ms] bg-[#231724] translate-y-[63%] pt-[15px] text-on-primary group-hover:translate-y-0 group-hover:pt-[55px]" data-portfolio-container>
-		<h2 class="absolute block w-max top-0 px-[22px] py-1 text-[length:var(--text-title)] font-medium bg-black/50 backdrop-blur-[10px] z-[2] -translate-y-full rounded-tr-lg transition-all duration-[350ms] group-hover:translate-y-[11%] group-hover:backdrop-blur-0 group-hover:bg-transparent">{title}</h2>
-		<div class="px-[22px] flex w-full h-full flex-col gap-[10px]">
-			<p class="text-[length:var(--text-medium)] whitespace-nowrap overflow-hidden text-ellipsis h-5 transition-[height] duration-[350ms] group-hover:overflow-auto group-hover:whitespace-normal group-hover:h-[90px] group-hover:max-h-[90px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:bg-surface [&::-webkit-scrollbar]:rounded [&::-webkit-scrollbar-thumb]:w-0.5 [&::-webkit-scrollbar-thumb]:bg-primary [&::-webkit-scrollbar-thumb]:rounded">{descripcion}</p>
+	<div
+		style={`background: ${averageColor.hex};`}
+		class={twMerge(
+			`absolute flex flex-col h-full w-full top-0 transition-all duration-[350ms] translate-y-[63%] pt-[15px] text-on-primary group-hover:translate-y-0 group-hover:pt-[55px]`
+		)}
+		data-portfolio-container>
+		<h2
+			class='absolute block w-max top-0 px-[22px] py-1 text-[length:var(--text-title)] font-medium bg-black/50 backdrop-blur-[10px] z-[2] -translate-y-full rounded-tr-lg transition-all duration-[350ms] group-hover:translate-y-[11%] group-hover:backdrop-blur-0 group-hover:bg-transparent'>
+			{title}
+		</h2>
+		<div class='px-[22px] flex w-full h-full flex-col gap-[10px]'>
+			<p
+				class='text-[length:var(--text-medium)] whitespace-nowrap overflow-hidden text-ellipsis h-5 transition-[height] duration-[350ms] group-hover:overflow-auto group-hover:whitespace-normal group-hover:h-[90px] group-hover:max-h-[90px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:bg-surface [&::-webkit-scrollbar]:rounded [&::-webkit-scrollbar-thumb]:w-0.5 [&::-webkit-scrollbar-thumb]:bg-primary [&::-webkit-scrollbar-thumb]:rounded'>
+				{descripcion}
+			</p>
 
-			<div class="flex gap-[10px] text-[3rem]">
+			<div class='flex gap-[10px] text-[3rem]'>
 				{
-					skills.map((skill) => (
-						<iconify-icon class="iconify" icon={skill} />
+					skills.map(skill => (
+						<iconify-icon
+							class='iconify'
+							icon={skill}
+						/>
 					))
 				}
 			</div>
 
-			<div class="p-[14px] w-full h-[47px] box-border flex justify-center gap-[22px] text-[length:var(--text-button)]">
-				<a href={repoURL} class="relative hover:text-primary-80 after:absolute after:bottom-0 after:left-0 after:content-[''] after:h-0.5 after:w-full after:origin-[0_0] after:scale-x-0 after:bg-primary after:transition-transform after:duration-[350ms] hover:after:scale-x-100">
-					<span class="flex items-center gap-1">
+			<div
+				class='w-full h-[47px] box-border flex justify-center gap-[22px] text-[length:var(--text-button)]'>
+				<a
+					href={repoURL}
+					class="relative hover:text-primary-80 after:absolute after:bottom-0 after:left-0 after:content-[''] after:h-0.5 after:w-full after:origin-[0_0] after:scale-x-0 after:bg-primary after:transition-transform after:duration-[350ms] hover:after:scale-x-100">
+					<span class='flex items-center gap-1'>
 						Github
-						{(<iconify-icon icon="quill:link-out" />)}
+						{(<iconify-icon icon='quill:link-out' />)}
 					</span>
 				</a>
 
-				<a href={demoURL} class="relative hover:text-primary-80 after:absolute after:bottom-0 after:left-0 after:content-[''] after:h-0.5 after:w-full after:origin-[0_0] after:scale-x-0 after:bg-primary after:transition-transform after:duration-[350ms] hover:after:scale-x-100">
-					<span class="flex items-center gap-1">
+				<a
+					href={demoURL}
+					class="relative hover:text-primary-80 after:absolute after:bottom-0 after:left-0 after:content-[''] after:h-0.5 after:w-full after:origin-[0_0] after:scale-x-0 after:bg-primary after:transition-transform after:duration-[350ms] hover:after:scale-x-100">
+					<span class='flex items-center gap-1'>
 						Demo
-						{(<iconify-icon icon="quill:link-out" />)}
+						{(<iconify-icon icon='quill:link-out' />)}
 					</span>
 				</a>
 			</div>
@@ -58,22 +99,27 @@ const cardId = `portfolio-card-${Math.random().toString(36).substring(2, 11)}`;
 	</div>
 </div>
 
-<script>
+<!-- <script>
 	import { getIMGAverageColor } from '~/utils/average-img-color';
 
 	// Get all portfolio cards on the page
 	document.addEventListener('DOMContentLoaded', () => {
 		const cards = document.querySelectorAll('[data-portfolio-card]');
-		
+
 		cards.forEach(card => {
-			const container = card.querySelector<HTMLDivElement>('[data-portfolio-container]');
-			const img = card.querySelector<HTMLImageElement>('[data-portfolio-img]');
-			
+			const container = card.querySelector<HTMLDivElement>(
+				'[data-portfolio-container]'
+			);
+			const img = card.querySelector<HTMLImageElement>(
+				'[data-portfolio-img]'
+			);
+
 			if (!img || !container) return;
 
 			const setBg = () => {
 				const [rgbString] = getIMGAverageColor(img, 0.7);
 				if (rgbString) {
+          console.log("rgbString", rgbString);
 					container.style.background = rgbString;
 				}
 			};
@@ -87,4 +133,4 @@ const cardId = `portfolio-card-${Math.random().toString(36).substring(2, 11)}`;
 			}
 		});
 	});
-</script>
+</script> -->
