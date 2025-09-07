@@ -6,7 +6,7 @@
   --color-text-default: var(--color-text);
   --color-text-offset: var(--color-text-offset);
 
-  --color-background-default: var(--color-background);
+  --color-page: var(--color-background);
   --color-background-offset: var(--color-background-offset);
   --color-background-border: var(--color-border);
 
