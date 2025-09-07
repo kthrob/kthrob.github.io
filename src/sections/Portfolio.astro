@@ -51,12 +51,12 @@ const {
 <script>
 	import { getIMGAverageColor } from '~/utils/average-img-color';
 
-	const $cards = document.querySelectorAll('.card__portfolio');
+	const $cards = document.querySelectorAll('[data-portfolio-card]');
 	$cards.forEach(card => {
 		const $container = card.querySelector<HTMLDivElement>(
-			'.descripcion__container'
+			'[data-portfolio-container]'
 		);
-		const $img = card.querySelector('img');
+		const $img = card.querySelector<HTMLImageElement>('[data-portfolio-img]');
 		if (!$img || !$container) return;
 
 		const setBg = () => {

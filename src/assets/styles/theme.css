@@ -2,6 +2,9 @@
 @theme inline {
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-80: var(--primary-80);
+  --color-surface: var(--surface);
 
   --color-text-default: var(--color-text);
   --color-text-offset: var(--color-text-offset);
@@ -11,6 +14,10 @@
   --color-background-border: var(--color-border);
 
   --color-border: var(--color-border);
+
+  --font-size-text-title: var(--text-title);
+  --font-size-text-medium: var(--text-medium);
+  --font-size-text-button: var(--text-button);
 
 }
 
@@ -23,6 +30,13 @@
   --color-background: theme("colors.gray.50");
   --color-background-offset: theme("colors.gray.100");
   --color-border: theme("colors.gray.900");
+  
+  --on-primary: theme("colors.white");
+  --primary-80: theme("colors.blue.500");
+  --surface: theme("colors.gray.200");
+  --text-title: 1.125rem;
+  --text-medium: 0.875rem;
+  --text-button: 0.875rem;
 }
 
 [data-theme="dark"] {
@@ -33,4 +47,11 @@
   --color-background: theme("colors.gray.900");
   --color-background-offset: theme("colors.gray.800");
   --color-border: theme("colors.gray.50");
+  
+  --on-primary: theme("colors.gray.50");
+  --primary-80: theme("colors.blue.400");
+  --surface: theme("colors.gray.700");
+  --text-title: 1.125rem;
+  --text-medium: 0.875rem;
+  --text-button: 0.875rem;
 }
