@@ -1,0 +1,18 @@
+---
+import { Icon } from 'astro-icon/components';
+import { basic, menuItems } from '~/config/cv.json';
+---
+
+<a
+	class='hover:!text-default relative flex items-center gap-3'
+	href='/'>
+	<h1 class='sr-only'>{basic.name}</h1>
+	<Icon
+		name='logomark'
+		class='size-10'
+	/>
+	<Icon
+		name='wordmark'
+		class='hidden h-4 sm:block'
+	/>
+</a>
