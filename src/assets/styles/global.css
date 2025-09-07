@@ -6,6 +6,8 @@
 
 @custom-variant light (&:where([data-theme=light] *));
 
+@custom-variant intersect (&:not([no-intersect] *));
+
 @theme {
   --animate-wiggle: wiggle 1s ease-in-out infinite;
 
