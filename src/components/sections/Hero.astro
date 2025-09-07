@@ -11,18 +11,18 @@ import { basic } from '../../config/cv.json';
                 <Image class="w-full md:max-w-md lg:max-w-md"
                     src={heroImage}
                     loading="eager"
-                    alt="Astro Resume Theme - Paul Smith" />
+                    alt={`Image of ${basic?.name}`} />
             </div>
             <div>
                 <p class="text-lg text-text-offset">
                     {basic?.job}
                 </p>
 
-                <h1 class="text-2xl font-bold sm:text-4xl lg:text-5xl mt-3">
+                <h1 class="text-text-default text-2xl font-bold sm:text-4xl lg:text-5xl mt-3">
                     {basic?.name}
                 </h1>
 
-                <p class="mt-5 text-base sm:text-xl">
+                <p class="text-text-default mt-5 text-base sm:text-xl">
                     {basic?.summary}
                 </p>
 

@@ -15,10 +15,9 @@ interface Link {
 }
 
 interface Action extends Link {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'text';
-  size?: 'small' | 'medium' | 'large';
-  target?: '_blank' | '_self' | '_parent' | '_top';
-  rel?: string;
+  text: string;
+  href: string;
+  target?: string;
 }
 
 interface MenuLink extends Link {
@@ -48,7 +47,7 @@ const {
 	showRssFeed = false,
 	position = 'center'
 } = Astro.props;
-
+console.log('Actions: ', actions);
 const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 ---
 
