@@ -2,6 +2,7 @@
 import { getPortafolioData } from '../components/data/portfolioData.js';
 import Card from '~/components/sections/portfolio/card-portfolio/CardPortfolio.astro';
 import WidgetWrapper from '~/components/WidgetWrapper.astro';
+import Headline from '~/components/Headline.astro';
 
 const {
 	title = await Astro.slots.render('title'),
@@ -28,6 +29,7 @@ const {
 	isDark={isDark}
 	containerClass={`max-w-7xl ${classes?.container ?? ''}`}
 	bg={bg}>
+  <Headline {title} {subtitle} {tagline} classes={{ container: classes?.headline ?? '' }} />
 	<div class='portfolio__container'>
 		<div class='portfolio__elements'>
 			{getPortafolioData.map(props => <Card {...props} />)}
