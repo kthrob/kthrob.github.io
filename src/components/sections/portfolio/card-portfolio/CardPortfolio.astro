@@ -3,39 +3,24 @@ import { twMerge } from 'tailwind-merge';
 
 const {
 	title,
-	descripcion,
+	description,
 	imgSrc,
 	skills,
 	repoURL,
 	demoURL,
-	averageBrightness
+	averageBrightness,
+	averageColor
 } = Astro.props;
 
 // Generate a unique ID for this card instance
 const cardId = `portfolio-card-${Math.random().toString(36).substring(2, 11)}`;
 
-import { getAverageColor } from 'fast-average-color-node';
+// Use the stored averageColor from the content entry, with fallbacks
+const colorHex = averageColor || (averageBrightness !== undefined 
+  ? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)` 
+  : '#6366f1');
 
-let averageColor;
-try {
-  averageColor = await getAverageColor(imgSrc, {
-    mode: 'precision',
-    algorithm: 'simple',
-    ignoredColor: [ 255, 255, 255, 255 ],
-  });
-  console.log("averageColor", averageColor);
-} catch (error) {
-  console.warn(`Failed to get average color for ${imgSrc}:`, error);
-  // Fallback to a default color or use the averageBrightness if available
-  averageColor = {
-    hex: averageBrightness !== undefined 
-      ? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)` 
-      : '#6366f1', // Default indigo color
-    rgb: averageBrightness !== undefined 
-      ? `rgb(${Math.round(averageBrightness * 255)}, ${Math.round(averageBrightness * 255)}, ${Math.round(averageBrightness * 255)})`
-      : 'rgb(99, 102, 241)'
-  };
-}
+console.log(`Using color ${colorHex} for portfolio item: ${title}`);
 ---
 
 <div
@@ -55,7 +40,7 @@ try {
 	/>
 
 	<div
-		style={`background: ${averageColor.hex};`}
+		style={`background: ${colorHex};`}
 		class={twMerge(
 			`absolute flex flex-col h-full w-full top-0 transition-all duration-[350ms] translate-y-[63%] pt-[15px] text-on-primary group-hover:translate-y-0 group-hover:pt-[55px]`
 		)}
@@ -67,7 +52,7 @@ try {
 		<div class='px-[22px] flex w-full h-full flex-col gap-[10px]'>
 			<p
 				class='text-[length:var(--text-medium)] whitespace-nowrap overflow-hidden text-ellipsis h-5 transition-[height] duration-[350ms] group-hover:overflow-auto group-hover:whitespace-normal group-hover:h-full'>
-				{descripcion}
+				{description}
 			</p>
 
 			<div class='flex gap-[10px] text-[3rem]'>

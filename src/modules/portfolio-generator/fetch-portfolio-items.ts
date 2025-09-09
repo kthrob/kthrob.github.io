@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'path';
 import captureWebsite from 'capture-website';
+import { getAverageColor } from 'fast-average-color-node';
 import { pageConfig } from '~/config/page.config';
 
 // Constants - Find project root by looking for package.json
@@ -69,6 +70,21 @@ async function createContentEntry(item: any, screenshotPath: string) {
     
   const contentPath = path.join(PORTFOLIO_CONTENT_DIR, `${slug}.json`);
   
+  // Calculate average color from the screenshot
+  let averageColorHex = '#6366f1'; // Default fallback
+  try {
+    console.log(`🎨 Calculating average color for ${path.basename(screenshotPath)}...`);
+    const averageColor = await getAverageColor(screenshotPath, {
+      mode: 'precision',
+      algorithm: 'simple',
+      ignoredColor: [ 255, 255, 255, 255 ],
+    });
+    averageColorHex = averageColor.hex;
+    console.log(`✨ Average color calculated: ${averageColorHex}`);
+  } catch (error) {
+    console.warn(`⚠️  Failed to calculate average color for ${path.basename(screenshotPath)}: ${error.message}`);
+    console.warn(`   Using default color: ${averageColorHex}`);
+  }
   
   // Build the content object (exclude null/undefined values for optional fields)
   const content: any = {
@@ -76,7 +92,8 @@ async function createContentEntry(item: any, screenshotPath: string) {
     description: item.description || '',
     imgSrc: `/src/images/portfolio/${path.basename(screenshotPath)}`,
     skills: item.skills || [],
-    anim: "fade-up"
+    anim: "fade-up",
+    averageColor: averageColorHex
   };
   
   // Only add optional fields if they have values
@@ -87,13 +104,24 @@ async function createContentEntry(item: any, screenshotPath: string) {
     content.repoURL = item.githubURL;
   }
   
-  // Check if content file already exists
+  // Check if content file already exists and if it has averageColor
+  let shouldUpdate = true;
   try {
     await fs.access(contentPath);
-    console.log(`📄 Content entry already exists: ${path.basename(contentPath)}`);
-    return { contentPath, slug };
+    const existingContent = JSON.parse(await fs.readFile(contentPath, 'utf8'));
+    if (existingContent.averageColor) {
+      console.log(`📄 Content entry already has average color: ${path.basename(contentPath)}`);
+      shouldUpdate = false;
+    } else {
+      console.log(`🔄 Updating content entry with average color: ${path.basename(contentPath)}`);
+    }
   } catch {
     // File doesn't exist, create it
+    console.log(`✨ Creating new content entry: ${path.basename(contentPath)}`);
+  }
+  
+  if (!shouldUpdate) {
+    return { contentPath, slug };
   }
   
   // Write the content file

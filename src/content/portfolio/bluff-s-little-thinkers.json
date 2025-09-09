@@ -4,5 +4,6 @@
   "imgSrc": "/src/images/portfolio/bluff-s-little-thinkers.png",
   "skills": [],
   "anim": "fade-up",
+  "averageColor": "#7a7bb0",
   "demoURL": "https://www.bluffslittlethinkers.com"
 }

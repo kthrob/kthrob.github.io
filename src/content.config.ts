@@ -194,6 +194,7 @@ const portfolioCollection = defineCollection({
     repoURL: z.string().optional(),
     anim: z.string().optional(),
     averageBrightness: z.number().optional(),
+    averageColor: z.string().optional(),
   }),
 });
 

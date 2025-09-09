@@ -4,5 +4,6 @@
   "imgSrc": "/src/images/portfolio/test.png",
   "skills": [],
   "anim": "fade-up",
+  "averageColor": "#0e131e",
   "demoURL": "https://www.apple.com"
 }
