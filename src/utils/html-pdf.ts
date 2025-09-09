@@ -13,10 +13,12 @@ Handlebars.registerHelper('loud', function (aString) {
   return aString.toUpperCase()
 })
 
+
+const accentColor = '#0000FF'
 const styles = `
   <style>
     main { margin: 30px; }
-    h1 { color: red; }
+    h1 { color: ${accentColor} }
     h2 {
       text-transform: uppercase;
       margin: 2px auto;
@@ -33,7 +35,7 @@ const styles = `
     .divider {
       border: none;
       height: 1px;
-      background-color: #0000FF;
+      background-color: ${accentColor};
       margin: 0;
     }
   </style>
