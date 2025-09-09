@@ -38,6 +38,7 @@
     "astro-compress": "2.3.8",
     "astro-compressor": "^1.1.1",
     "html-minifier-terser": "^7.2.0",
+    "prettier": "^3.6.2",
     "tailwind-merge": "^2.6.0"
   }
 }

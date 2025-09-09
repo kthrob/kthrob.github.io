@@ -3,6 +3,7 @@ import path from "path";
 import html_to_pdf from 'html-pdf-node';
 import Handlebars from "handlebars";
 import { pageConfig } from '~/config/page.config';
+import prettier from "prettier";
 
 const pdfPath = './src/assets/pdf_output/output.pdf'
 const htmlPath = './src/assets/pdf_output/output.html'
@@ -87,6 +88,12 @@ const resumeTemplate = Handlebars.compile(
   `.replace(/\s+/g, " ")
 )
 
+async function formatHTML(html: string): Promise<string> {
+  const result = await prettier.format(html, {
+    parser: "html", // tell Prettier we’re formatting HTML
+  });
+  return result;
+}
 
 async function deleteFileIfExists(path: string): Promise<void> {
   try {
@@ -102,10 +109,12 @@ async function deleteFileIfExists(path: string): Promise<void> {
   }
 }
 
-let html = { content: resumeTemplate({...pageConfig}) };
+const html = { content: resumeTemplate({...pageConfig}) };
+const formatted = await formatHTML(html.content);
+console.log("FORMATTED: ", formatted)
 
 deleteFileIfExists(htmlPath);
-await fs.writeFile(htmlPath, JSON.stringify(html.content).trim(), 'utf8');
+await fs.writeFile(htmlPath, formatted, 'utf8');
 
 console.log('HTML file generated successfully: output.html');
 
