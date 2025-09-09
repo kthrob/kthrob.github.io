@@ -3,6 +3,7 @@ interface BasicInfo {
   jobRole: string; // e.g., "Full Stack Developer",
   summary: string; // A brief summary or tagline
   location: string;
+  contactInfo: ContactInfo;
 }
 
 interface ContactInfo {
@@ -65,7 +66,6 @@ interface portfolioItem {
 
 interface pageConfig {
   basicInfo: BasicInfo;
-  contactInfo: ContactInfo;
   socialLinks?: SocialLinks; // Optional
   experience: experienceItem[];
   education: educationItem[];
@@ -78,13 +78,13 @@ export const pageConfig: pageConfig = {
     name: "Keith Robinson",
     jobRole: "Senior Fullstack Software Engineer",
     summary: "Results-driven full-stack engineer with 6+ years of experience building scalable, high-performance web applications. Skilled in modernizing legacy systems, optimizing developer workflows, and delivering user-centric solutions. Proven track record of improving system performance, reducing bugs, and mentoring teams to deliver high-quality software.",
-    location: "Phoenix, Arizona"
-  },
-  contactInfo: {
-    email: "kthrob@gmail.com",
-    phone: "712-490-7823",
-    linkedin: "https://linkedin.com/in/keith-robinson-2b6527118",
-    github: "https://github.com/kthrob"
+    location: "Phoenix, Arizona",
+    contactInfo: {
+      email: "kthrob@gmail.com",
+      phone: "712-490-7823",
+      linkedin: "https://linkedin.com/in/keith-robinson-2b6527118",
+      github: "https://github.com/kthrob"
+    },
   },
   socialLinks: {
     twitter: { platform: "Twitter", url: "https://twitter.com/kthrob" }
