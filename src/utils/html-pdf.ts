@@ -4,6 +4,9 @@ import html_to_pdf from 'html-pdf-node';
 import Handlebars from "handlebars";
 import { pageConfig } from '~/config/page.config';
 
+const pdfPath = './src/assets/pdf_output/output.pdf'
+const htmlPath = './src/assets/pdf_output/output.html'
+
 console.log('FS: ', fs)
 
 console.log("Config: ", pageConfig.basicInfo)
@@ -21,19 +24,6 @@ const styles = `
     }
   </style>
 `
-
-const format = {
-  name: "Keith Robinson",
-  jobRole: "Senior Fullstack Software Engineer",
-  summary: "Results-driven full-stack engineer with 6+ years of experience building scalable, high-performance web applications. Skilled in modernizing legacy systems, optimizing developer workflows, and delivering user-centric solutions. Proven track record of improving system performance, reducing bugs, and mentoring teams to deliver high-quality software.",
-  location: "Phoenix, Arizona",
-  contactInfo: {
-    email: "kthrob@gmail.com",
-    phone: "712-490-7823",
-    linkedin: "https://linkedin.com/in/keith-robinson-2b6527118",
-    github: "https://github.com/kthrob"
-  },
-}
 
 const resumeTemplate = Handlebars.compile(
   `
@@ -94,27 +84,10 @@ const resumeTemplate = Handlebars.compile(
 
     </main>
     ${styles}
-  `
+  `.replace(/\s+/g, " ")
 )
 
-const exp = {
-  role: "Senior Product Engineer",
-  companyName: "Promethic Systems",
-  companyLocation: "Wilmington, Delaware",
-  remote: true,
-  companyURL: "https://promethic.online",
-  startDate: { year: "2024", month: "September" },
-  description: "Leading the development of a cutting-edge SaaS platform for managing and optimizing cloud infrastructure. Collaborating closely with cross-functional teams to deliver high-impact features that enhance user experience and operational efficiency.",
-  achievements: [
-    "Architected and implemented a microservices-based architecture using Node.js, Express, and Docker, resulting in a 30% improvement in system scalability and maintainability.",
-    "Led the migration of legacy systems to modern cloud infrastructure on AWS, reducing operational costs by 20% and improving deployment times by 50%.",
-    "Mentored junior developers and conducted code reviews, fostering a culture of continuous learning and high-quality code standards within the team."
-  ]
-}
 
-
-
-let outputPath = './src/assets/pdf_output/output.pdf'
 async function deleteFileIfExists(path: string): Promise<void> {
   try {
     await fs.access(path); // Check if the file can be accessed (exists)
@@ -129,18 +102,17 @@ async function deleteFileIfExists(path: string): Promise<void> {
   }
 }
 
-deleteFileIfExists(outputPath)
+let html = { content: resumeTemplate({...pageConfig}) };
 
-let options = { format: 'A4', path: outputPath };
-// Example of options with args //
-// let options = { format: 'A4', args: ['--no-sandbox', '--disable-setuid-sandbox'] };
+deleteFileIfExists(htmlPath);
+await fs.writeFile(htmlPath, JSON.stringify(html.content).trim(), 'utf8');
+
+console.log('HTML file generated successfully: output.html');
 
 
+let options = { format: 'A4', path: pdfPath };
 
-let file = { content: resumeTemplate({...pageConfig}) };
-
-console.log("File: ", file)
-
-html_to_pdf.generatePdf(file, options).then(pdfBuffer => {
+deleteFileIfExists(pdfPath);
+html_to_pdf.generatePdf(html, options).then(pdfBuffer => {
   console.log("PDF generated");
 });
