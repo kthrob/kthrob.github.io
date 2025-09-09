@@ -8,20 +8,33 @@ import prettier from "prettier";
 const pdfPath = './src/assets/pdf_output/output.pdf'
 const htmlPath = './src/assets/pdf_output/output.html'
 
-console.log('FS: ', fs)
 
-console.log("Config: ", pageConfig.basicInfo)
-const template = Handlebars.compile("<p>{{name}}</p><p>{{age}}</p><style>p { color: red; }</style>");
-console.log(template({ name: "Nils", age: 30 }));
+Handlebars.registerHelper('loud', function (aString) {
+  return aString.toUpperCase()
+})
 
 const styles = `
   <style>
     main { margin: 30px; }
     h1 { color: red; }
+    h2 {
+      text-transform: uppercase;
+      margin: 2px auto;
+    }
+    hr {
+      margin: 0;
+      color: blue;
+    }
     p { color: blue; }
     .experience-header {
       display: flex;
       justify-content: space-between;
+    }
+    .divider {
+      border: none;
+      height: 1px;
+      background-color: #0000FF;
+      margin: 0;
     }
   </style>
 `
@@ -32,7 +45,7 @@ const resumeTemplate = Handlebars.compile(
       {{#with basicInfo}}
       <header>
         <div id='name'>
-          <h1>{{name}}</h1>
+          <h1>{{loud name}}</h1>
         </div>
         <div id='title'>
           <p>{{jobRole}}</p>
@@ -43,9 +56,9 @@ const resumeTemplate = Handlebars.compile(
           <span>{{contactInfo.phone}}</span>
         </div>
       </header>
-      <hr>
+      <div class="divider"></div>
       <h2>Profile</h2>
-      <hr>
+      <div class="divider"></div>
       <div>
         <p>{{summary}}</p>
       </div>
@@ -109,12 +122,12 @@ async function deleteFileIfExists(path: string): Promise<void> {
   }
 }
 
-const html = { content: resumeTemplate({...pageConfig}) };
+const html = { content: resumeTemplate({ ...pageConfig }) };
 const formatted = await formatHTML(html.content);
 console.log("FORMATTED: ", formatted)
 
-deleteFileIfExists(htmlPath);
-await fs.writeFile(htmlPath, formatted, 'utf8');
+deleteFileIfExists(htmlPath).then(() => fs.writeFile(htmlPath, formatted, 'utf8'))
+// fs.writeFile(htmlPath, formatted, 'utf8');
 
 console.log('HTML file generated successfully: output.html');
 
