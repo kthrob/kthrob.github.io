@@ -1,7 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "path";
 import html_to_pdf from 'html-pdf-node';
-import Handlebars from "handlebars";
 import { pageConfig } from '~/config/page.config';
 import prettier from "prettier";
 
@@ -43,77 +42,70 @@ const resumeStyles = rawResumeStyles.replace(
 const pdfPath = path.join(currentDir, 'src/assets/pdf_output/output.pdf');
 const htmlPath = path.join(currentDir, 'src/assets/pdf_output/output.html');
 
-Handlebars.registerHelper('loud', function (aString) {
-  return aString.toUpperCase()
-})
 
 const styles = `
   <style>
     ${resumeStyles}
   </style>
-`
+`;
 
-const resumeTemplate = Handlebars.compile(
-  `
+const renderExperienceItem = (exp) => `
+  <div class="experience-header">
+    <div>
+      <span>${exp.role}</span>,
+      <span>${exp.companyName}</span>,
+      <span>${exp.companyLocation}</span>
+    </div>
+    <div>
+      <span>${exp.startDate.month} ${exp.startDate.year}</span> -
+      ${exp.endDate ? 
+        `<span>${exp.endDate.month} ${exp.endDate.year}</span>` : 
+        '<span>Present</span>'
+      }
+    </div>
+  </div>
+  <div class="experience-bullets">
+    <ul>
+      ${exp.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
+    </ul>
+  </div>
+`;
+
+const generateResumeHTML = (data) => {
+  const { basicInfo, experience } = data;
+  
+  return `
     <main>
-      {{#with basicInfo}}
       <header>
         <div id='name'>
-          <h1>{{loud name}}</h1>
+          <h1>${basicInfo.name.toUpperCase()}</h1>
         </div>
         <div id='title'>
-          <p>{{jobRole}}</p>
+          <p>${basicInfo.jobRole}</p>
         </div>
         <div>
-          <span>{{location}}</span> | 
-          <span>{{contactInfo.email}}</span> |
-          <span>{{contactInfo.phone}}</span>
+          <span>${basicInfo.location}</span> | 
+          <span>${basicInfo.contactInfo.email}</span> |
+          <span>${basicInfo.contactInfo.phone}</span>
         </div>
       </header>
       <div class="divider"></div>
       <h2>Profile</h2>
       <div class="divider"></div>
       <div>
-        <p>{{summary}}</p>
+        <p>${basicInfo.summary}</p>
       </div>
-      {{/with}}
       <hr>
       <h2>Professional Experience</h2>
       <hr>
-      {{#each experience}}
-      {{! Extract to partial }}
-        <div class="experience-header">
-          <div>
-            <span>{{role}}</span>,
-            <span>{{companyName}}</span>,
-            <span>{{companyLocation}}</span>
-          </div>
-          <div>
-            <span>{{startDate.month}} {{startDate.year}}</span> -
-            {{#if endDate}}
-            <span>{{endDate.month}} {{endDate.year}}</span>
-            {{else}}
-            <span>Present</span>
-            {{/if}}
-          </div>
-        </div>
-        <div class="experience-bullets">
-          <ul>
-          {{#each achievements}}
-            <li>{{this}}</li>
-          {{/each}}
-          </ul>
-        </div>
-      {{! END of partial }}
-      {{/each}}
+      ${experience.map(renderExperienceItem).join('')}
       <hr>
       <h2>Technical Skills</h2>
       <hr>
-
     </main>
     ${styles}
-  `.replace(/\s+/g, " ")
-)
+  `.replace(/\s+/g, " ");
+};
 
 async function formatHTML(html: string): Promise<string> {
   const result = await prettier.format(html, {
@@ -136,7 +128,7 @@ async function deleteFileIfExists(path: string): Promise<void> {
   }
 }
 
-const html = { content: resumeTemplate({ ...pageConfig }) };
+const html = { content: generateResumeHTML({ ...pageConfig }) };
 const formatted = await formatHTML(html.content);
 
 deleteFileIfExists(htmlPath).then(() => fs.writeFile(htmlPath, formatted, 'utf8'))
