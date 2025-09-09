@@ -1,0 +1,8 @@
+{
+  "title": "Test",
+  "description": "Test Portfolio entry",
+  "imgSrc": "/src/images/portfolio/test.png",
+  "skills": [],
+  "anim": "fade-up",
+  "demoURL": "https://www.apple.com"
+}

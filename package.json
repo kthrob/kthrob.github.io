@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "bun ./src/utils/fetch-portfolio-items.ts",
+    "prebuild": "bun ./src/modules/portfolio-generator/fetch-portfolio-items.ts",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"

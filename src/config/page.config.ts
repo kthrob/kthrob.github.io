@@ -184,6 +184,12 @@ export const pageConfig: pageConfig = {
       type: "Website",
       description: "Customer facing website for childcare facility.",
       webURL: 'https://www.bluffslittlethinkers.com'
+    },
+    {
+      title: "Test",
+      type: "Website",
+      description: "Test Portfolio entry",
+      webURL: 'https://www.apple.com'
     }
   ]
 }
