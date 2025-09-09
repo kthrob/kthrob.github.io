@@ -7,8 +7,32 @@ import prettier from "prettier";
 
 import '@fontsource-variable/inter';
 import '~/modules/resume-generator/resume-styles.css'
-const pdfPath = './src/assets/pdf_output/output.pdf'
-const htmlPath = './src/assets/pdf_output/output.html'
+
+// Read the Inter Variable font CSS content and fix relative paths
+// Find the project root by looking for package.json
+let currentDir = process.cwd();
+while (!await fs.access(path.join(currentDir, 'package.json')).then(() => true).catch(() => false)) {
+  const parentDir = path.dirname(currentDir);
+  if (parentDir === currentDir) {
+    throw new Error('Could not find project root (package.json not found)');
+  }
+  currentDir = parentDir;
+}
+
+const interFontPath = path.resolve(currentDir, 'node_modules/@fontsource-variable/inter');
+const rawInterFontCss = await fs.readFile(
+  path.join(interFontPath, 'index.css'),
+  'utf8'
+);
+
+// Convert relative URLs to absolute file URLs for PDF generation
+const interFontCss = rawInterFontCss.replace(
+  /url\(\.\/files\//g,
+  `url(file://${interFontPath}/files/`
+);
+
+const pdfPath = path.join(currentDir, 'src/assets/pdf_output/output.pdf');
+const htmlPath = path.join(currentDir, 'src/assets/pdf_output/output.html');
 
 
 
@@ -21,9 +45,12 @@ Handlebars.registerHelper('loud', function (aString) {
 const accentColor = '#0000FF'
 const styles = `
   <style>
+    /* Embedded Inter Variable font definitions */
+    ${interFontCss}
+    
     main { 
       margin: 30px;
-      font-family: "Inter Variable"; 
+      font-family: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
     }
     h1 { color: ${accentColor} }
     h2 {
