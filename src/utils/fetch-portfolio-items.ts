@@ -5,8 +5,8 @@ import { getPortafolioData } from '~/components/data/portfolioData.js';
 
 // const portfolioItems = await getCollection('portfolio');
 
-const portfolioItems = await getPortafolioData();
-console.log('Portfolio Items:', portfolioItems);
+// const portfolioItems = await getPortafolioData();
+// console.log('Portfolio Items:', portfolioItems);
 
 // portfolioItems.forEach(async (item) => {
 //   const fileName = item.title.toLowerCase().replace(/\s+/g, '_') + '.png';

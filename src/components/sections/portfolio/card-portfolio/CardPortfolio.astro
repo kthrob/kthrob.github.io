@@ -24,12 +24,26 @@ const cardId = `portfolio-card-${Math.random().toString(36).substring(2, 11)}`;
 
 import { getAverageColor } from 'fast-average-color-node';
 
-const averageColor = await getAverageColor(imgSrc, {
-  mode: 'precision',
-  algorithm: 'simple',
-  ignoredColor: [ 255, 255, 255, 255 ],
-});
-console.log("averageColor", averageColor);
+let averageColor;
+try {
+  averageColor = await getAverageColor(imgSrc, {
+    mode: 'precision',
+    algorithm: 'simple',
+    ignoredColor: [ 255, 255, 255, 255 ],
+  });
+  console.log("averageColor", averageColor);
+} catch (error) {
+  console.warn(`Failed to get average color for ${imgSrc}:`, error);
+  // Fallback to a default color or use the averageBrightness if available
+  averageColor = {
+    hex: averageBrightness !== undefined 
+      ? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)` 
+      : '#6366f1', // Default indigo color
+    rgb: averageBrightness !== undefined 
+      ? `rgb(${Math.round(averageBrightness * 255)}, ${Math.round(averageBrightness * 255)}, ${Math.round(averageBrightness * 255)})`
+      : 'rgb(99, 102, 241)'
+  };
+}
 ---
 
 <div
