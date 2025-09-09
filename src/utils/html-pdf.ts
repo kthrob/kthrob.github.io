@@ -15,14 +15,31 @@ const styles = `
     main { margin: 30px; }
     h1 { color: red; }
     p { color: blue; }
+    .experience-header {
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 `
+
+const format = {
+  name: "Keith Robinson",
+  jobRole: "Senior Fullstack Software Engineer",
+  summary: "Results-driven full-stack engineer with 6+ years of experience building scalable, high-performance web applications. Skilled in modernizing legacy systems, optimizing developer workflows, and delivering user-centric solutions. Proven track record of improving system performance, reducing bugs, and mentoring teams to deliver high-quality software.",
+  location: "Phoenix, Arizona",
+  contactInfo: {
+    email: "kthrob@gmail.com",
+    phone: "712-490-7823",
+    linkedin: "https://linkedin.com/in/keith-robinson-2b6527118",
+    github: "https://github.com/kthrob"
+  },
+}
 
 const resumeTemplate = Handlebars.compile(
   `
     <main>
-      <header>
       {{#with basicInfo}}
+      <header>
         <div id='name'>
           <h1>{{name}}</h1>
         </div>
@@ -30,15 +47,70 @@ const resumeTemplate = Handlebars.compile(
           <p>{{jobRole}}</p>
         </div>
         <div>
-          <span>{{location}}</span>
+          <span>{{location}}</span> | 
+          <span>{{contactInfo.email}}</span> |
+          <span>{{contactInfo.phone}}</span>
         </div>
-      {{/with}}
       </header>
+      <hr>
+      <h2>Profile</h2>
+      <hr>
+      <div>
+        <p>{{summary}}</p>
+      </div>
+      {{/with}}
+      <hr>
+      <h2>Professional Experience</h2>
+      <hr>
+      {{#each experience}}
+      {{! Extract to partial }}
+        <div class="experience-header">
+          <div>
+            <span>{{role}}</span>,
+            <span>{{companyName}}</span>,
+            <span>{{companyLocation}}</span>
+          </div>
+          <div>
+            <span>{{startDate.month}} {{startDate.year}}</span> -
+            {{#if endDate}}
+            <span>{{endDate.month}} {{endDate.year}}</span>
+            {{else}}
+            <span>Present</span>
+            {{/if}}
+          </div>
+        </div>
+        <div class="experience-bullets">
+          <ul>
+          {{#each achievements}}
+            <li>{{this}}</li>
+          {{/each}}
+          </ul>
+        </div>
+      {{! END of partial }}
+      {{/each}}
+      <hr>
+      <h2>Technical Skills</h2>
+      <hr>
+
     </main>
     ${styles}
   `
 )
 
+const exp = {
+  role: "Senior Product Engineer",
+  companyName: "Promethic Systems",
+  companyLocation: "Wilmington, Delaware",
+  remote: true,
+  companyURL: "https://promethic.online",
+  startDate: { year: "2024", month: "September" },
+  description: "Leading the development of a cutting-edge SaaS platform for managing and optimizing cloud infrastructure. Collaborating closely with cross-functional teams to deliver high-impact features that enhance user experience and operational efficiency.",
+  achievements: [
+    "Architected and implemented a microservices-based architecture using Node.js, Express, and Docker, resulting in a 30% improvement in system scalability and maintainability.",
+    "Led the migration of legacy systems to modern cloud infrastructure on AWS, reducing operational costs by 20% and improving deployment times by 50%.",
+    "Mentored junior developers and conducted code reviews, fostering a culture of continuous learning and high-quality code standards within the team."
+  ]
+}
 
 
 
