@@ -32,7 +32,7 @@ const {
   <Headline {title} {subtitle} {tagline} classes={{ container: classes?.headline ?? '' }} />
 	<div class='portfolio__container'>
 		<div class='portfolio__elements'>
-			{getPortafolioData.map(props => <Card {...props} />)}
+			{getPortafolioData.map(portfolioData => <Card {...portfolioData} />)}
 		</div>
 	</div>
 </WidgetWrapper>

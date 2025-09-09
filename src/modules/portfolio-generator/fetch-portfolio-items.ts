@@ -1,9 +1,11 @@
-// import { getCollection } from 'astro:content';
+import { getCollection } from 'astro:content';
 import captureWebsite from 'capture-website';
 import { getPortafolioData } from '~/components/data/portfolioData.js';
 
 
-// const portfolioItems = await getCollection('portfolio');
+const portfolioItems = await getCollection('portfolio');
+
+console.log("PORTFOLIO: ", portfolioItems)
 
 // const portfolioItems = await getPortafolioData();
 // console.log('Portfolio Items:', portfolioItems);
