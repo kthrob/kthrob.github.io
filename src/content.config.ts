@@ -186,12 +186,14 @@ const portfolioCollection = defineCollection({
     base: './src/content/portfolio',
   }),
   schema: z.object({
-    imgSrc: z.string().url(),
+    imgSrc: z.string(),
     title: z.string(),
     skills: z.array(z.string()),
-    descripcion: z.string(),
-    demoURL: z.string().url().optional(),
-    repoURL: z.string().url().optional(),
+    description: z.string(),
+    demoURL: z.string().optional(),
+    repoURL: z.string().optional(),
+    anim: z.string().optional(),
+    averageBrightness: z.number().optional(),
   }),
 });
 
