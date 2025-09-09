@@ -6,7 +6,6 @@ import { pageConfig } from '~/config/page.config';
 import prettier from "prettier";
 
 import '@fontsource-variable/inter';
-import '~/modules/resume-generator/resume-styles.css'
 
 // Read the Inter Variable font CSS content and fix relative paths
 // Find the project root by looking for package.json
@@ -31,47 +30,26 @@ const interFontCss = rawInterFontCss.replace(
   `url(file://${interFontPath}/files/`
 );
 
+// Read the resume styles CSS file
+const resumeStylesPath = path.join(currentDir, 'src/modules/resume-generator/resume-styles.css');
+const rawResumeStyles = await fs.readFile(resumeStylesPath, 'utf8');
+
+// Replace the font placeholder with actual Inter font CSS
+const resumeStyles = rawResumeStyles.replace(
+  '/* INTER_FONT_CSS_PLACEHOLDER */',
+  interFontCss
+);
+
 const pdfPath = path.join(currentDir, 'src/assets/pdf_output/output.pdf');
 const htmlPath = path.join(currentDir, 'src/assets/pdf_output/output.html');
-
-
-
 
 Handlebars.registerHelper('loud', function (aString) {
   return aString.toUpperCase()
 })
 
-
-const accentColor = '#0000FF'
 const styles = `
   <style>
-    /* Embedded Inter Variable font definitions */
-    ${interFontCss}
-    
-    main { 
-      margin: 30px;
-      font-family: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
-    }
-    h1 { color: ${accentColor} }
-    h2 {
-      text-transform: uppercase;
-      margin: 2px auto;
-    }
-    hr {
-      margin: 0;
-      color: blue;
-    }
-    p { color: blue; }
-    .experience-header {
-      display: flex;
-      justify-content: space-between;
-    }
-    .divider {
-      border: none;
-      height: 1px;
-      background-color: ${accentColor};
-      margin: 0;
-    }
+    ${resumeStyles}
   </style>
 `
 
