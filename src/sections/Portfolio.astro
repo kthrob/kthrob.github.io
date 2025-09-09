@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import { getPortafolioData } from '~/components/data/portfolioData.js';
 import Card from '~/components/sections/portfolio/card-portfolio/CardPortfolio.astro';
 import WidgetWrapper from '~/components/WidgetWrapper.astro';
@@ -18,6 +19,8 @@ const {
 	classes = {},
 	bg = await Astro.slots.render('bg')
 } = Astro.props;
+
+const portfolioData = await getCollection('portfolio')
 ---
 
 <!-- <section
@@ -32,7 +35,7 @@ const {
   <Headline {title} {subtitle} {tagline} classes={{ container: classes?.headline ?? '' }} />
 	<div class='portfolio__container'>
 		<div class='portfolio__elements'>
-			{getPortafolioData.map(portfolioData => <Card {...portfolioData} />)}
+			{portfolioData.map(portfolioData => <Card {...portfolioData.data} />)}
 		</div>
 	</div>
 </WidgetWrapper>
