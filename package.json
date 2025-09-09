@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node -e \"console.log('Running prebuild tasks...')\"",
+    "prebuild": "bun ./src/utils/fetch-portfolio-items.ts",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -22,14 +22,22 @@
     "capture-website": "^4.2.0",
     "fast-average-color": "^9.5.0",
     "fast-average-color-node": "^3.1.0",
+    "handlebars": "^4.7.8",
+    "html-pdf-node": "^1.0.8",
     "limax": "4.1.0",
+    "lodash.merge": "^4.6.2",
+    "sharp": "^0.34.3",
+    "sharp-ico": "^0.1.5",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.5.4",
     "unpic": "^4.1.2"
   },
   "devDependencies": {
-    "tailwind-merge": "^2.6.0",
     "@iconify-json/tabler": "^1.2.17",
-    "@tailwindcss/typography": "^0.5.15"
+    "@tailwindcss/typography": "^0.5.15",
+    "astro-compress": "2.3.8",
+    "astro-compressor": "^1.1.1",
+    "html-minifier-terser": "^7.2.0",
+    "tailwind-merge": "^2.6.0"
   }
 }

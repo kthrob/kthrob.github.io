@@ -33,7 +33,7 @@ console.log("averageColor", averageColor);
 ---
 
 <div
-	class='group relative w-[332px] h-[246px] overflow-hidden rounded-xl bg-red-400'
+	class='group relative w-[332px] h-[246px] overflow-hidden rounded-xl bg-black'
 	data-portfolio-card
 	id={cardId}>
 	<img
@@ -60,7 +60,7 @@ console.log("averageColor", averageColor);
 		</h2>
 		<div class='px-[22px] flex w-full h-full flex-col gap-[10px]'>
 			<p
-				class='text-[length:var(--text-medium)] whitespace-nowrap overflow-hidden text-ellipsis h-5 transition-[height] duration-[350ms] group-hover:overflow-auto group-hover:whitespace-normal group-hover:h-[90px] group-hover:max-h-[90px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:bg-surface [&::-webkit-scrollbar]:rounded [&::-webkit-scrollbar-thumb]:w-0.5 [&::-webkit-scrollbar-thumb]:bg-primary [&::-webkit-scrollbar-thumb]:rounded'>
+				class='text-[length:var(--text-medium)] whitespace-nowrap overflow-hidden text-ellipsis h-5 transition-[height] duration-[350ms] group-hover:overflow-auto group-hover:whitespace-normal group-hover:h-full'>
 				{descripcion}
 			</p>
 
@@ -76,7 +76,7 @@ console.log("averageColor", averageColor);
 			</div>
 
 			<div
-				class='w-full h-[47px] box-border flex justify-center gap-[22px] text-[length:var(--text-button)]'>
+				class='mb-4 w-full box-border flex justify-center gap-[22px] text-[length:var(--text-button)]'>
 				<a
 					href={repoURL}
 					class="relative hover:text-primary-80 after:absolute after:bottom-0 after:left-0 after:content-[''] after:h-0.5 after:w-full after:origin-[0_0] after:scale-x-0 after:bg-primary after:transition-transform after:duration-[350ms] hover:after:scale-x-100">

@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 
-// import tailwind from '@astrojs/tailwind';
+import compress from "astro-compress";
+import compressor from "astro-compressor";
 import tailwindcss from "@tailwindcss/vite";
 import icon from 'astro-icon';
 import { fileURLToPath } from "url";
@@ -14,11 +15,27 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   output: 'static',
   site: "https://kthrob.github.io",
-  integrations: [ icon({include: {
-      'tabler': ['*']
-  } }), mdx(), sitemap(), promethic({
+  integrations: [ icon({
+    include: {
+      'tabler': [ '*' ]
+    }
+  }), mdx(), sitemap(), compress({
+    CSS: true,
+    HTML: {
+      "html-minifier-terser": {
+        removeAttributeQuotes: false,
+      },
+    },
+    Image: false,
+    JavaScript: true,
+    SVG: false,
+    Logger: 1,
+  }), compressor({
+    gzip: true,
+    brotli: true,
+  }), promethic({
     config: "./src/config.yaml",
-  }), ],
+  }) ],
   vite: {
     resolve: {
       alias: {

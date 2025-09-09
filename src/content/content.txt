@@ -1,0 +1,4 @@
+the post directory is from astrowind
+the blogs directory is from the astro-resume-theme template
+the blog directory is from screwfast
+the insights directory is from screwfast
