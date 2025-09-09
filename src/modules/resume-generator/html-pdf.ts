@@ -4,76 +4,162 @@ import html_to_pdf from 'html-pdf-node';
 import { pageConfig } from '~/config/page.config';
 import prettier from "prettier";
 
-import '@fontsource-variable/inter';
-
-// Read the Inter Variable font CSS content and fix relative paths
-// Find the project root by looking for package.json
-let currentDir = process.cwd();
-while (!await fs.access(path.join(currentDir, 'package.json')).then(() => true).catch(() => false)) {
-  const parentDir = path.dirname(currentDir);
-  if (parentDir === currentDir) {
-    throw new Error('Could not find project root (package.json not found)');
-  }
-  currentDir = parentDir;
+// TypeScript interfaces
+interface DateInfo {
+  month: string;
+  year: string;
 }
 
-const interFontPath = path.resolve(currentDir, 'node_modules/@fontsource-variable/inter');
-const rawInterFontCss = await fs.readFile(
-  path.join(interFontPath, 'index.css'),
-  'utf8'
-);
+interface Experience {
+  role: string;
+  companyName: string;
+  companyLocation: string;
+  startDate: DateInfo;
+  endDate?: DateInfo;
+  achievements: string[];
+}
 
-// Convert relative URLs to absolute file URLs for PDF generation
-const interFontCss = rawInterFontCss.replace(
-  /url\(\.\/files\//g,
-  `url(file://${interFontPath}/files/`
-);
+interface BasicInfo {
+  name: string;
+  jobRole: string;
+  location: string;
+  summary: string;
+  contactInfo: {
+    email: string;
+    phone: string;
+  };
+}
 
-// Read the resume styles CSS file
-const resumeStylesPath = path.join(currentDir, 'src/modules/resume-generator/resume-styles.css');
-const rawResumeStyles = await fs.readFile(resumeStylesPath, 'utf8');
+interface ResumeData {
+  basicInfo: BasicInfo;
+  experience: Experience[];
+}
 
-// Replace the font placeholder with actual Inter font CSS
-const resumeStyles = rawResumeStyles.replace(
-  '/* INTER_FONT_CSS_PLACEHOLDER */',
-  interFontCss
-);
+interface PdfOptions {
+  format: string;
+  path: string;
+}
 
-const pdfPath = path.join(currentDir, 'src/assets/pdf_output/output.pdf');
-const htmlPath = path.join(currentDir, 'src/assets/pdf_output/output.html');
+// Configuration constants
+const CONFIG = {
+  FONT_PACKAGE: '@fontsource-variable/inter',
+  FONT_PLACEHOLDER: '/* INTER_FONT_CSS_PLACEHOLDER */',
+  PATHS: {
+    FONT_CSS: 'index.css',
+    RESUME_STYLES: 'src/modules/resume-generator/resume-styles.css',
+    OUTPUT_DIR: 'src/assets/pdf_output',
+    HTML_OUTPUT: 'output.html',
+    PDF_OUTPUT: 'output.pdf'
+  },
+  PDF_FORMAT: 'A4' as const
+};
 
-
-const styles = `
-  <style>
-    ${resumeStyles}
-  </style>
-`;
-
-const renderExperienceItem = (exp) => `
-  <div class="experience-header">
-    <div>
-      <span>${exp.role}</span>,
-      <span>${exp.companyName}</span>,
-      <span>${exp.companyLocation}</span>
-    </div>
-    <div>
-      <span>${exp.startDate.month} ${exp.startDate.year}</span> -
-      ${exp.endDate ? 
-        `<span>${exp.endDate.month} ${exp.endDate.year}</span>` : 
-        '<span>Present</span>'
+// Utility Functions
+async function findProjectRoot(): Promise<string> {
+  let currentDir = process.cwd();
+  
+  while (true) {
+    try {
+      await fs.access(path.join(currentDir, 'package.json'));
+      return currentDir;
+    } catch {
+      const parentDir = path.dirname(currentDir);
+      if (parentDir === currentDir) {
+        throw new Error('Could not find project root (package.json not found)');
       }
-    </div>
-  </div>
-  <div class="experience-bullets">
-    <ul>
-      ${exp.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
-    </ul>
-  </div>
-`;
+      currentDir = parentDir;
+    }
+  }
+}
 
-const generateResumeHTML = (data) => {
+async function loadInterFontCSS(projectRoot: string): Promise<string> {
+  try {
+    const fontPath = path.resolve(projectRoot, 'node_modules', CONFIG.FONT_PACKAGE);
+    const fontCssPath = path.join(fontPath, CONFIG.PATHS.FONT_CSS);
+    
+    const rawFontCss = await fs.readFile(fontCssPath, 'utf8');
+    
+    // Convert relative URLs to absolute file URLs for PDF generation
+    return rawFontCss.replace(
+      /url\(\.\/(files\/[^)]+)\)/g,
+      `url(file://${fontPath}/$1)`
+    );
+  } catch (error) {
+    throw new Error(`Failed to load Inter font CSS: ${error}`);
+  }
+}
+
+async function loadAndProcessStyles(projectRoot: string, fontCSS: string): Promise<string> {
+  try {
+    const stylesPath = path.join(projectRoot, CONFIG.PATHS.RESUME_STYLES);
+    const rawStyles = await fs.readFile(stylesPath, 'utf8');
+    
+    return rawStyles.replace(CONFIG.FONT_PLACEHOLDER, fontCSS);
+  } catch (error) {
+    throw new Error(`Failed to load resume styles: ${error}`);
+  }
+}
+
+async function ensureFileDeleted(filePath: string): Promise<void> {
+  try {
+    await fs.access(filePath);
+    await fs.unlink(filePath);
+    console.log(`Deleted existing file: ${path.basename(filePath)}`);
+  } catch (err: any) {
+    if (err.code !== "ENOENT") {
+      throw new Error(`Failed to delete file ${filePath}: ${err.message}`);
+    }
+  }
+}
+
+async function formatHTML(html: string): Promise<string> {
+  try {
+    return await prettier.format(html, {
+      parser: "html",
+      printWidth: 120,
+      tabWidth: 2
+    });
+  } catch (error) {
+    console.warn('Failed to format HTML, using original:', error);
+    return html;
+  }
+}
+
+// Template Functions
+function renderExperienceItem(exp: Experience): string {
+  const endDateDisplay = exp.endDate 
+    ? `${exp.endDate.month} ${exp.endDate.year}`
+    : 'Present';
+  
+  const achievements = exp.achievements
+    .map(achievement => `<li>${achievement}</li>`)
+    .join('');
+    
+  return `
+    <div class="experience-header">
+      <div>
+        <span>${exp.role}</span>,
+        <span>${exp.companyName}</span>,
+        <span>${exp.companyLocation}</span>
+      </div>
+      <div>
+        <span>${exp.startDate.month} ${exp.startDate.year}</span> -
+        <span>${endDateDisplay}</span>
+      </div>
+    </div>
+    <div class="experience-bullets">
+      <ul>${achievements}</ul>
+    </div>
+  `;
+}
+
+function generateResumeHTML(data: ResumeData, styles: string): string {
   const { basicInfo, experience } = data;
   
+  const experienceHTML = experience
+    .map(renderExperienceItem)
+    .join('');
+    
   return `
     <main>
       <header>
@@ -98,47 +184,72 @@ const generateResumeHTML = (data) => {
       <hr>
       <h2>Professional Experience</h2>
       <hr>
-      ${experience.map(renderExperienceItem).join('')}
+      ${experienceHTML}
       <hr>
       <h2>Technical Skills</h2>
       <hr>
     </main>
-    ${styles}
+    <style>${styles}</style>
   `.replace(/\s+/g, " ");
-};
-
-async function formatHTML(html: string): Promise<string> {
-  const result = await prettier.format(html, {
-    parser: "html", // tell Prettier we’re formatting HTML
-  });
-  return result;
 }
 
-async function deleteFileIfExists(path: string): Promise<void> {
+// PDF Generation
+async function generatePDF(html: string, outputPath: string): Promise<void> {
+  const options: PdfOptions = {
+    format: CONFIG.PDF_FORMAT,
+    path: outputPath
+  };
+  
   try {
-    await fs.access(path); // Check if the file can be accessed (exists)
-    await fs.unlink(path); // Delete the file
-    console.log(`Deleted file at: ${path}`);
-  } catch (err: any) {
-    if (err.code === "ENOENT") {
-      console.log(`File does not exist at: ${path}`);
-    } else {
-      throw err; // Some other error (e.g., permissions)
-    }
+    await html_to_pdf.generatePdf({ content: html }, options);
+    console.log(`PDF generated: ${path.basename(outputPath)}`);
+  } catch (error) {
+    throw new Error(`Failed to generate PDF: ${error}`);
   }
 }
 
-const html = { content: generateResumeHTML({ ...pageConfig }) };
-const formatted = await formatHTML(html.content);
+// Main execution function
+async function main(): Promise<void> {
+  try {
+    console.log('Starting resume generation...');
+    
+    // Step 1: Find project root and setup paths
+    const projectRoot = await findProjectRoot();
+    const outputDir = path.join(projectRoot, CONFIG.PATHS.OUTPUT_DIR);
+    const htmlPath = path.join(outputDir, CONFIG.PATHS.HTML_OUTPUT);
+    const pdfPath = path.join(outputDir, CONFIG.PATHS.PDF_OUTPUT);
+    
+    // Step 2: Load and process styles (concurrent operations)
+    const [fontCSS] = await Promise.all([
+      loadInterFontCSS(projectRoot)
+    ]);
+    
+    const processedStyles = await loadAndProcessStyles(projectRoot, fontCSS);
+    
+    // Step 3: Generate HTML content
+    const htmlContent = generateResumeHTML(pageConfig as ResumeData, processedStyles);
+    const formattedHTML = await formatHTML(htmlContent);
+    
+    // Step 4: Clean up existing files and generate new ones (concurrent)
+    await Promise.all([
+      ensureFileDeleted(htmlPath),
+      ensureFileDeleted(pdfPath)
+    ]);
+    
+    // Step 5: Write HTML file
+    await fs.writeFile(htmlPath, formattedHTML, 'utf8');
+    console.log(`HTML generated: ${CONFIG.PATHS.HTML_OUTPUT}`);
+    
+    // Step 6: Generate PDF
+    await generatePDF(formattedHTML, pdfPath);
+    
+    console.log('✅ Resume generation completed successfully!');
+    
+  } catch (error) {
+    console.error('❌ Resume generation failed:', error);
+    process.exit(1);
+  }
+}
 
-deleteFileIfExists(htmlPath).then(() => fs.writeFile(htmlPath, formatted, 'utf8'))
-
-console.log('HTML file generated successfully: output.html');
-
-
-let options = { format: 'A4', path: pdfPath };
-
-deleteFileIfExists(pdfPath);
-html_to_pdf.generatePdf(html, options).then(pdfBuffer => {
-  console.log("PDF generated");
-});
+// Execute main function
+main();

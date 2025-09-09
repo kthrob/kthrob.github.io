@@ -16,7 +16,6 @@
         "capture-website": "^4.2.0",
         "fast-average-color": "^9.5.0",
         "fast-average-color-node": "^3.1.0",
-        "handlebars": "^4.7.8",
         "html-pdf-node": "^1.0.8",
         "limax": "4.1.0",
         "lodash.merge": "^4.6.2",
