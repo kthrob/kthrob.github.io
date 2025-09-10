@@ -185,11 +185,15 @@ function renderEducationItem(edu: Education): string {
     ? `${edu.endDate.month} ${edu.endDate.year}`
     : 'Present';
     
+  const degreeText = edu.degree 
+    ? `${edu.degree} in ${edu.fieldOfStudy}` 
+    : edu.fieldOfStudy;
+    
   return `
     <div class="education-entry">
       <div class="education-header">
         <div>
-          <div class="education-degree">${edu.fieldOfStudy}${edu.degree ? ` in ${edu.degree}` : ''}</div>
+          <div class="education-degree">${degreeText}</div>
           <div class="education-school">${edu.institution}</div>
         </div>
         <div class="education-dates">

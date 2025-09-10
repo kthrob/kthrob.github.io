@@ -172,7 +172,7 @@ export const pageConfig: pageConfig = {
     },
     {
       institution: "Iowa State University",
-      fieldOfStudy: "ArchitecturalEngineering",
+      fieldOfStudy: "Architectural Engineering",
       startDate: { year: "2004", month: "January" },
       endDate: { year: "2006", month: "January" },
       location: "Ames, Iowa"
