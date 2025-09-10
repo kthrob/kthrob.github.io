@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import { getPortafolioData } from '~/components/data/portfolioData.js';
 import Card from '~/components/sections/portfolio/card-portfolio/CardPortfolio.astro';
 import WidgetWrapper from '~/components/WidgetWrapper.astro';
-import Headline from '~/components/Headline.astro';
+import Headline from '~/components/ui/Headline.astro';
 
 const {
 	title = await Astro.slots.render('title'),

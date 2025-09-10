@@ -1,6 +1,6 @@
 ---
 import { twMerge } from 'tailwind-merge';
-
+import Image from '~/components/common/Image.astro';
 const {
 	title,
 	description,
@@ -16,9 +16,11 @@ const {
 const cardId = `portfolio-card-${Math.random().toString(36).substring(2, 11)}`;
 
 // Use the stored averageColor from the content entry, with fallbacks
-const colorHex = averageColor || (averageBrightness !== undefined 
-  ? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)` 
-  : '#6366f1');
+const colorHex =
+	averageColor ||
+	(averageBrightness !== undefined
+		? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)`
+		: '#6366f1');
 
 console.log(`Using color ${colorHex} for portfolio item: ${title}`);
 ---
@@ -27,7 +29,7 @@ console.log(`Using color ${colorHex} for portfolio item: ${title}`);
 	class='group relative w-[332px] h-[246px] overflow-hidden rounded-xl bg-black'
 	data-portfolio-card
 	id={cardId}>
-	<img
+	<!-- <img
 		src={imgSrc}
 		alt={title}
 		crossorigin='anonymous'
@@ -37,6 +39,18 @@ console.log(`Using color ${colorHex} for portfolio item: ${title}`);
 		average-brightness={averageBrightness}
 		class='object-cover object-[center_0] h-[160px] w-[332px] bg-black'
 		data-portfolio-img
+	/> -->
+
+	<Image
+		src={imgSrc}
+		class='max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700'
+		widths={[400, 900]}
+		sizes='(max-width: 900px) 400px, 900px'
+		alt={title || ''}
+		width={900}
+		height={506}
+		loading='eager'
+		decoding='async'
 	/>
 
 	<div
