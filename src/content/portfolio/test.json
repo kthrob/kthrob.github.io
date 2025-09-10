@@ -1,7 +1,7 @@
 {
   "title": "Test",
   "description": "Test Portfolio entry",
-  "imgSrc": "/src/images/portfolio/test.png",
+  "imgSrc": "/src/assets/images/portfolio/test.png",
   "skills": [],
   "anim": "fade-up",
   "averageColor": "#0e131e",

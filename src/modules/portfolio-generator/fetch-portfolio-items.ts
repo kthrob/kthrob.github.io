@@ -23,7 +23,7 @@ async function findProjectRoot() {
 }
 
 const PROJECT_ROOT = await findProjectRoot();
-const PORTFOLIO_IMAGES_DIR = path.join(PROJECT_ROOT, 'src/images/portfolio');
+const PORTFOLIO_IMAGES_DIR = path.join(PROJECT_ROOT, 'src/assets/images/portfolio');
 const PORTFOLIO_CONTENT_DIR = path.join(PROJECT_ROOT, 'src/content/portfolio');
 
 // Configuration options for screenshots
@@ -90,7 +90,7 @@ async function createContentEntry(item: any, screenshotPath: string) {
   const content: any = {
     title: item.title,
     description: item.description || '',
-    imgSrc: `/src/images/portfolio/${path.basename(screenshotPath)}`,
+    imgSrc: `/src/assets/images/portfolio/${path.basename(screenshotPath)}`,
     skills: item.skills || [],
     anim: "fade-up",
     averageColor: averageColorHex
