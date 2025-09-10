@@ -1,0 +1,172 @@
+/* Font placeholder for Inter Variable font CSS injection */
+/* INTER_FONT_CSS_PLACEHOLDER */
+
+/* Resume styles matching the screenshot format */
+.resume-container {
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 0.75in;
+  background-color: white;
+  font-family: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 10pt;
+  line-height: 1.4;
+  color: #333;
+}
+
+/* Header styling */
+.resume-name {
+  font-size: 32pt;
+  font-weight: 700;
+  color: #4472C4;
+  letter-spacing: 2px;
+  margin-bottom: 8pt;
+  text-align: left;
+}
+
+.resume-title {
+  font-size: 14pt;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4pt;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.resume-contact {
+  font-size: 10pt;
+  color: #666;
+  margin-bottom: 16pt;
+}
+
+.resume-contact span {
+  margin-right: 8pt;
+}
+
+/* Section headers */
+.section-header {
+  font-size: 12pt;
+  font-weight: 700;
+  color: #4472C4;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 20pt;
+  margin-bottom: 8pt;
+  padding-bottom: 2pt;
+  border-bottom: 2pt solid #4472C4;
+}
+
+/* Experience entries */
+.experience-entry {
+  margin-bottom: 16pt;
+  page-break-inside: avoid;
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4pt;
+}
+
+.experience-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.experience-company {
+  font-weight: 500;
+  color: #333;
+}
+
+.experience-location {
+  color: #666;
+  font-style: italic;
+}
+
+.experience-dates {
+  font-weight: 500;
+  color: #666;
+  white-space: nowrap;
+}
+
+.experience-description {
+  font-style: italic;
+  color: #666;
+  margin-bottom: 4pt;
+  font-size: 9pt;
+}
+
+/* Bullet points */
+.experience-bullets {
+  margin-left: 16pt;
+}
+
+.experience-bullets ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.experience-bullets li {
+  margin-bottom: 3pt;
+  position: relative;
+  padding-left: 12pt;
+}
+
+.experience-bullets li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #4472C4;
+  font-weight: bold;
+}
+
+/* Skills section */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12pt;
+  margin-top: 8pt;
+}
+
+.skills-category {
+  font-size: 9pt;
+}
+
+/* Education section */
+.education-entry {
+  margin-bottom: 12pt;
+}
+
+.education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.education-degree {
+  font-weight: 600;
+  color: #333;
+}
+
+.education-school {
+  color: #666;
+  margin-top: 2pt;
+}
+
+.education-dates {
+  font-weight: 500;
+  color: #666;
+}
+
+/* Utility classes */
+.mb-2 { margin-bottom: 4pt; }
+.mb-4 { margin-bottom: 8pt; }
+.mb-6 { margin-bottom: 12pt; }
+.text-sm { font-size: 9pt; }
+.font-medium { font-weight: 500; }
+.font-bold { font-weight: 600; }
+.leading-relaxed { line-height: 1.4; }
+.text-gray-700 { color: #555; }
+.text-gray-900 { color: #333; }
+.text-gray-600 { color: #666; }

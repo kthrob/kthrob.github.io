@@ -47,13 +47,13 @@ const CONFIG = {
   PATHS: {
     FONT_CSS: 'index.css',
     RESUME_STYLES: 'src/modules/resume-generator/resume-styles.css',
+    SCREENSHOT_STYLES: 'src/modules/resume-generator/resume-screenshot-styles.css',
     OUTPUT_DIR: 'src/assets/pdf_output',
     HTML_OUTPUT: 'output.html',
     PDF_OUTPUT: 'output.pdf'
   },
   PDF_FORMAT: 'A4' as const
 };
-
 // Utility Functions
 async function findProjectRoot(): Promise<string> {
   let currentDir = process.cwd();
@@ -100,6 +100,21 @@ async function loadAndProcessStyles(projectRoot: string, fontCSS: string): Promi
   }
 }
 
+async function loadScreenshotStyles(projectRoot: string, fontCSS: string): Promise<string> {
+  try {
+    const screenshotStylesPath = path.join(projectRoot, CONFIG.PATHS.SCREENSHOT_STYLES);
+    const rawStyles = await fs.readFile(screenshotStylesPath, 'utf8');
+    
+    // Replace the font placeholder with actual Inter font CSS
+    const stylesWithFont = rawStyles.replace(CONFIG.FONT_PLACEHOLDER, fontCSS);
+    
+    console.log('Loading screenshot-style CSS...');
+    return stylesWithFont;
+  } catch (error) {
+    throw new Error(`Failed to load screenshot styles: ${error}`);
+  }
+}
+
 async function ensureFileDeleted(filePath: string): Promise<void> {
   try {
     await fs.access(filePath);
@@ -136,60 +151,98 @@ function renderExperienceItem(exp: Experience): string {
     .join('');
     
   return `
-    <div class="experience-header">
-      <div>
-        <span>${exp.role}</span>,
-        <span>${exp.companyName}</span>,
-        <span>${exp.companyLocation}</span>
+    <div class="experience-entry">
+      <div class="experience-header">
+        <div>
+          <span class="experience-title">${exp.role}</span>, 
+          <span class="experience-company">${exp.companyName}</span>, 
+          <span class="experience-location">${exp.companyLocation}</span>
+        </div>
+        <div class="experience-dates">
+          ${exp.startDate.month} ${exp.startDate.year} — ${endDateDisplay}
+        </div>
       </div>
-      <div>
-        <span>${exp.startDate.month} ${exp.startDate.year}</span> -
-        <span>${endDateDisplay}</span>
+      <div class="experience-description">
+        ${exp.role} at ${exp.companyName}, driving software development and product innovation.
       </div>
-    </div>
-    <div class="experience-bullets">
-      <ul>${achievements}</ul>
+      <div class="experience-bullets">
+        <ul>${achievements}</ul>
+      </div>
     </div>
   `;
 }
 
-function generateResumeHTML(data: ResumeData, styles: string): string {
+function generateResumeHTML(data: ResumeData): string {
   const { basicInfo, experience } = data;
   
   const experienceHTML = experience
     .map(renderExperienceItem)
     .join('');
+  
+  const skillsHTML = `
+    <div class="skills-grid">
+      <div class="skills-category">Ecmascript/Typescript</div>
+      <div class="skills-category">ReactJS</div>
+      <div class="skills-category">NodeJS</div>
+      <div class="skills-category">System Optimization</div>
+      <div class="skills-category">Docker</div>
+      <div class="skills-category">JAMstack</div>
+      <div class="skills-category">PostgreSQL</div>
+      <div class="skills-category"></div>
+    </div>
+  `;
+  
+  const educationHTML = `
+    <div class="education-entry">
+      <div class="education-header">
+        <div>
+          <div class="education-degree">Architectural Engineering in interior design</div>
+          <div class="education-school">Western Iowa Tech Community College</div>
+        </div>
+        <div class="education-dates">January 2009 — January 2011</div>
+      </div>
+    </div>
+    <div class="education-entry">
+      <div class="education-header">
+        <div>
+          <div class="education-degree">Architectural Engineering</div>
+          <div class="education-school">Iowa State University</div>
+        </div>
+        <div class="education-dates">January 2004 — January 2006</div>
+      </div>
+    </div>
+  `;
     
   return `
-    <main>
+    <div class="resume-container">
+      <!-- Header Section -->
       <header>
-        <div id='name'>
-          <h1>${basicInfo.name.toUpperCase()}</h1>
-        </div>
-        <div>
-          <p id='title'>${basicInfo.jobRole}</p>
-        </div>
-        <div>
+        <h1 class="resume-name">${basicInfo.name.toUpperCase()}</h1>
+        <h2 class="resume-title">${basicInfo.jobRole}</h2>
+        <div class="resume-contact">
           <span>${basicInfo.location}</span> | 
-          <span>${basicInfo.contactInfo.email}</span> |
-          <span>${basicInfo.contactInfo.phone}</span>
+          <span>${basicInfo.contactInfo.email}</span> | 
+          <span>${basicInfo.contactInfo.phone}</span> | 
+          <span>github.com/kthrob</span>
         </div>
       </header>
-      <div class="divider"></div>
-      <h2>Profile</h2>
-      <div class="divider"></div>
-      <div>
-        <p>${basicInfo.summary}</p>
-      </div>
-      <hr>
-      <h2>Professional Experience</h2>
-      <hr>
+      
+      <!-- Profile Section -->
+      <h2 class="section-header">Profile</h2>
+      <p>${basicInfo.summary}</p>
+      
+      <!-- Professional Experience Section -->
+      <h2 class="section-header">Professional Experience</h2>
       ${experienceHTML}
-      <hr>
-      <h2>Technical Skills</h2>
-      <hr>
-    </main>
-    <style>${styles}</style>
+      
+      <!-- Technical Skills Section -->
+      <h2 class="section-header">Technical Skills</h2>
+      ${skillsHTML}
+      
+      <!-- Education Section -->
+      <h2 class="section-header">Education</h2>
+      ${educationHTML}
+    </div>
   `.replace(/\s+/g, " ");
 }
 
@@ -219,28 +272,28 @@ async function main(): Promise<void> {
     const htmlPath = path.join(outputDir, CONFIG.PATHS.HTML_OUTPUT);
     const pdfPath = path.join(outputDir, CONFIG.PATHS.PDF_OUTPUT);
     
-    // Step 2: Load and process styles (concurrent operations)
-    const [fontCSS] = await Promise.all([
-      loadInterFontCSS(projectRoot)
-    ]);
+    // Step 2: Load font CSS
+    const fontCSS = await loadInterFontCSS(projectRoot);
     
-    const processedStyles = await loadAndProcessStyles(projectRoot, fontCSS);
+    // Step 3: Load screenshot-style CSS
+    const screenshotStyles = await loadScreenshotStyles(projectRoot, fontCSS);
     
-    // Step 3: Generate HTML content
-    const htmlContent = generateResumeHTML(pageConfig as ResumeData, processedStyles);
-    const formattedHTML = await formatHTML(htmlContent);
+    // Step 4: Generate HTML content and combine with styles
+    const htmlContentWithoutStyles = generateResumeHTML(pageConfig as ResumeData);
+    const htmlContentWithStyles = `${htmlContentWithoutStyles}<style>${screenshotStyles}</style>`;
+    const formattedHTML = await formatHTML(htmlContentWithStyles);
     
-    // Step 4: Clean up existing files and generate new ones (concurrent)
+    // Step 5: Clean up existing files
     await Promise.all([
       ensureFileDeleted(htmlPath),
       ensureFileDeleted(pdfPath)
     ]);
     
-    // Step 5: Write HTML file
+    // Step 6: Write HTML file
     await fs.writeFile(htmlPath, formattedHTML, 'utf8');
     console.log(`HTML generated: ${CONFIG.PATHS.HTML_OUTPUT}`);
     
-    // Step 6: Generate PDF
+    // Step 7: Generate PDF
     await generatePDF(formattedHTML, pdfPath);
     
     console.log('✅ Resume generation completed successfully!');
