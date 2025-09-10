@@ -38,6 +38,16 @@ interface ResumeData {
 interface PdfOptions {
   format: string;
   path: string;
+  margin?: {
+    top?: string;
+    right?: string;
+    bottom?: string;
+    left?: string;
+  };
+  displayHeaderFooter?: boolean;
+  footerTemplate?: string;
+  printBackground?: boolean;
+  preferCSSPageSize?: boolean;
 }
 
 // Configuration constants
@@ -147,7 +157,7 @@ function renderExperienceItem(exp: Experience): string {
     : 'Present';
   
   const achievements = exp.achievements
-    .map(achievement => `<li>${achievement}</li>`)
+    .map(achievement => `<li><span class="bullet">•</span>${achievement}</li>`)
     .join('');
     
   return `
@@ -246,11 +256,26 @@ function generateResumeHTML(data: ResumeData): string {
   `.replace(/\s+/g, " ");
 }
 
-// PDF Generation
+// PDF Generation using html-pdf-node options
+// Reference: https://github.com/mrafiqk/html-pdf-node
 async function generatePDF(html: string, outputPath: string): Promise<void> {
-  const options: PdfOptions = {
+  const options = {
     format: CONFIG.PDF_FORMAT,
-    path: outputPath
+    path: outputPath,
+    margin: {
+      top: '0.75in',
+      right: '0.75in', 
+      bottom: '1in',
+      left: '0.75in'
+    },
+    displayHeaderFooter: true,
+    footerTemplate: `
+      <div style="font-size: 9pt; color: #666; text-align: center; width: 100%;">
+        <span class="pageNumber"></span>
+      </div>
+    `,
+    printBackground: true,
+    preferCSSPageSize: false
   };
   
   try {

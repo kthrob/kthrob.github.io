@@ -32,16 +32,16 @@
     <div class="experience-bullets">
       <ul>
         <li>
-          Architected and implemented a microservices-based architecture using Node.js, Express, and Docker, resulting
-          in a 30% improvement in system scalability and maintainability.
+          <span class="bullet">•</span>Architected and implemented a microservices-based architecture using Node.js,
+          Express, and Docker, resulting in a 30% improvement in system scalability and maintainability.
         </li>
         <li>
-          Led the migration of legacy systems to modern cloud infrastructure on AWS, reducing operational costs by 20%
-          and improving deployment times by 50%.
+          <span class="bullet">•</span>Led the migration of legacy systems to modern cloud infrastructure on AWS,
+          reducing operational costs by 20% and improving deployment times by 50%.
         </li>
         <li>
-          Mentored junior developers and conducted code reviews, fostering a culture of continuous learning and
-          high-quality code standards within the team.
+          <span class="bullet">•</span>Mentored junior developers and conducted code reviews, fostering a culture of
+          continuous learning and high-quality code standards within the team.
         </li>
       </ul>
     </div>
@@ -59,10 +59,16 @@
     </div>
     <div class="experience-bullets">
       <ul>
-        <li>Designed backend architecture for a greenfield energy product, enabling scalable growth.</li>
-        <li>Implemented tRPC, reducing integration bugs by ~30 % and accelerating feature delivery.</li>
-        <li>Pioneered React Server Components, cutting client bundle size by ~20%.</li>
-        <li>Directed migration from NodeJS to Bun, improving build times by ~25%.</li>
+        <li>
+          <span class="bullet">•</span>Designed backend architecture for a greenfield energy product, enabling scalable
+          growth.
+        </li>
+        <li>
+          <span class="bullet">•</span>Implemented tRPC, reducing integration bugs by ~30 % and accelerating feature
+          delivery.
+        </li>
+        <li><span class="bullet">•</span>Pioneered React Server Components, cutting client bundle size by ~20%.</li>
+        <li><span class="bullet">•</span>Directed migration from NodeJS to Bun, improving build times by ~25%.</li>
       </ul>
     </div>
   </div>
@@ -79,9 +85,9 @@
     </div>
     <div class="experience-bullets">
       <ul>
-        <li>Developed healthcare software on .NET, ensuring HL7/FHIR compliance.</li>
-        <li>Modernized legacy .NET app by integrating React components.</li>
-        <li>Converted XML configs to YAML, reducing setup errors by ~20%.</li>
+        <li><span class="bullet">•</span>Developed healthcare software on .NET, ensuring HL7/FHIR compliance.</li>
+        <li><span class="bullet">•</span>Modernized legacy .NET app by integrating React components.</li>
+        <li><span class="bullet">•</span>Converted XML configs to YAML, reducing setup errors by ~20%.</li>
       </ul>
     </div>
   </div>
@@ -98,9 +104,12 @@
     </div>
     <div class="experience-bullets">
       <ul>
-        <li>Enhanced Shopify sites with Liquid templates, improving UX.</li>
-        <li>Built backend automation workflows, reducing inventory overhead by ~12%.</li>
-        <li>Optimized integrations with NoSQL + GraphQL, reducing manual intervention by ~30%.</li>
+        <li><span class="bullet">•</span>Enhanced Shopify sites with Liquid templates, improving UX.</li>
+        <li><span class="bullet">•</span>Built backend automation workflows, reducing inventory overhead by ~12%.</li>
+        <li>
+          <span class="bullet">•</span>Optimized integrations with NoSQL + GraphQL, reducing manual intervention by
+          ~30%.
+        </li>
       </ul>
     </div>
   </div>
@@ -118,9 +127,12 @@
     </div>
     <div class="experience-bullets">
       <ul>
-        <li>Delivered technical support for client networks and systems.</li>
-        <li>Spearheaded the transition of hosting from VMs to containers, cutting costs by >20%.</li>
-        <li>Proactively resolved performance bottlenecks to improve reliability.</li>
+        <li><span class="bullet">•</span>Delivered technical support for client networks and systems.</li>
+        <li>
+          <span class="bullet">•</span>Spearheaded the transition of hosting from VMs to containers, cutting costs by
+          >20%.
+        </li>
+        <li><span class="bullet">•</span>Proactively resolved performance bottlenecks to improve reliability.</li>
       </ul>
     </div>
   </div>
@@ -244,10 +256,6 @@
 
   /* Resume styles matching the screenshot format */
   .resume-container {
-    max-width: 8.5in;
-    margin: 0 auto;
-    padding: 0.75in;
-    background-color: white;
     font-family:
       "Inter Variable",
       -apple-system,
@@ -258,6 +266,7 @@
     font-size: 10pt;
     line-height: 1.4;
     color: #333;
+    background-color: white;
   }
 
   /* Header styling */
@@ -343,7 +352,7 @@
     font-size: 9pt;
   }
 
-  /* Bullet points */
+  /* Bullet points - PDF-compatible approach */
   .experience-bullets {
     margin-left: 16pt;
   }
@@ -351,21 +360,22 @@
   .experience-bullets ul {
     margin: 0;
     padding: 0;
-    list-style: none;
+    list-style: none; /* Remove default list styling */
   }
 
   .experience-bullets li {
     margin-bottom: 3pt;
-    position: relative;
-    padding-left: 12pt;
+    padding-left: 0;
+    color: #333;
+    line-height: 1.4;
   }
 
-  .experience-bullets li:before {
-    content: "•";
-    position: absolute;
-    left: 0;
+  /* Explicit bullet styling for PDF compatibility */
+  .bullet {
     color: #4472c4;
     font-weight: bold;
+    margin-right: 8pt;
+    display: inline-block;
   }
 
   /* Skills section */
@@ -404,6 +414,52 @@
   .education-dates {
     font-weight: 500;
     color: #666;
+  }
+
+  /* Print-specific styles for PDF generation */
+  @media print {
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .resume-page {
+      margin: 0;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    .page-footer {
+      position: fixed;
+      bottom: 0.5in;
+    }
+  }
+
+  @page {
+    size: 8.5in 11in;
+    margin: 0;
+    counter-increment: page;
+  }
+
+  @page:first {
+    counter-reset: page 1;
+  }
+
+  /* Page break controls */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .no-page-break {
+    page-break-inside: avoid;
+  }
+
+  .keep-with-next {
+    page-break-after: avoid;
   }
 
   /* Utility classes */

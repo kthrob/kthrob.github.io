@@ -3,14 +3,11 @@
 
 /* Resume styles matching the screenshot format */
 .resume-container {
-  max-width: 8.5in;
-  margin: 0 auto;
-  padding: 0.75in;
-  background-color: white;
   font-family: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 10pt;
   line-height: 1.4;
   color: #333;
+  background-color: white;
 }
 
 /* Header styling */
@@ -96,7 +93,7 @@
   font-size: 9pt;
 }
 
-/* Bullet points */
+/* Bullet points - PDF-compatible approach */
 .experience-bullets {
   margin-left: 16pt;
 }
@@ -104,21 +101,22 @@
 .experience-bullets ul {
   margin: 0;
   padding: 0;
-  list-style: none;
+  list-style: none; /* Remove default list styling */
 }
 
 .experience-bullets li {
   margin-bottom: 3pt;
-  position: relative;
-  padding-left: 12pt;
+  padding-left: 0;
+  color: #333;
+  line-height: 1.4;
 }
 
-.experience-bullets li:before {
-  content: "•";
-  position: absolute;
-  left: 0;
+/* Explicit bullet styling for PDF compatibility */
+.bullet {
   color: #4472C4;
   font-weight: bold;
+  margin-right: 8pt;
+  display: inline-block;
 }
 
 /* Skills section */
@@ -157,6 +155,52 @@
 .education-dates {
   font-weight: 500;
   color: #666;
+}
+
+/* Print-specific styles for PDF generation */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .resume-page {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+  }
+  
+  .page-footer {
+    position: fixed;
+    bottom: 0.5in;
+  }
+}
+
+@page {
+  size: 8.5in 11in;
+  margin: 0;
+  counter-increment: page;
+}
+
+@page:first {
+  counter-reset: page 1;
+}
+
+/* Page break controls */
+.page-break-before {
+  page-break-before: always;
+}
+
+.page-break-after {
+  page-break-after: always;
+}
+
+.no-page-break {
+  page-break-inside: avoid;
+}
+
+.keep-with-next {
+  page-break-after: avoid;
 }
 
 /* Utility classes */
