@@ -1,0 +1,9 @@
+{
+  "title": "Screwfast",
+  "description": "Screwfast Portfolio entry",
+  "imgSrc": "/src/images/portfolio/screwfast.png",
+  "skills": [],
+  "anim": "fade-up",
+  "averageColor": "#d3cec1",
+  "demoURL": "https://www.screwfast.uk"
+}

@@ -166,8 +166,8 @@ function generateResumeHTML(data: ResumeData, styles: string): string {
         <div id='name'>
           <h1>${basicInfo.name.toUpperCase()}</h1>
         </div>
-        <div id='title'>
-          <p>${basicInfo.jobRole}</p>
+        <div>
+          <p id='title'>${basicInfo.jobRole}</p>
         </div>
         <div>
           <span>${basicInfo.location}</span> | 
