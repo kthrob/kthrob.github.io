@@ -90,7 +90,7 @@ async function createContentEntry(item: any, screenshotPath: string) {
   const content: any = {
     title: item.title,
     description: item.description || '',
-    imgSrc: `/src/assets/images/portfolio/${path.basename(screenshotPath)}`,
+    imgSrc: `~/assets/images/portfolio/${path.basename(screenshotPath)}`,
     skills: item.skills || [],
     anim: "fade-up",
     averageColor: averageColorHex

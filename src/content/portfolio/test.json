@@ -1,9 +1,9 @@
 {
   "title": "Test",
   "description": "Test Portfolio entry",
-  "imgSrc": "/src/assets/images/portfolio/test.png",
+  "imgSrc": "~/assets/images/portfolio/test.png",
   "skills": [],
   "anim": "fade-up",
-  "averageColor": "#0e131e",
+  "averageColor": "#0f131e",
   "demoURL": "https://www.apple.com"
 }

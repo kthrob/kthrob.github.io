@@ -293,10 +293,9 @@ export async function getImagesOptimized(
     width ||= Number(image.width) || undefined;
     height ||= typeof width === 'number' ? computeHeight(width, image.width / image.height) : undefined;
   }
-
   width = (width && Number(width)) || undefined;
   height = (height && Number(height)) || undefined;
-
+  
   widths ||= config.deviceSizes;
   sizes ||= getSizes(Number(width) || undefined, layout);
   aspectRatio = parseAspectRatio(aspectRatio);

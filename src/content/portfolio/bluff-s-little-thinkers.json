@@ -1,7 +1,7 @@
 {
   "title": "Bluff's Little Thinkers",
   "description": "Customer facing website for childcare facility.",
-  "imgSrc": "/src/assets/images/portfolio/bluff-s-little-thinkers.png",
+  "imgSrc": "~/assets/images/portfolio/bluff-s-little-thinkers.png",
   "skills": [],
   "anim": "fade-up",
   "averageColor": "#7a7bb0",

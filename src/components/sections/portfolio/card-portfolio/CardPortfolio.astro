@@ -1,6 +1,6 @@
 ---
 import { twMerge } from 'tailwind-merge';
-import { Image } from 'astro:assets';
+import Image from '~/components/common/Image.astro'
 const {
 	title,
 	description,
@@ -23,14 +23,13 @@ const colorHex =
 		? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)`
 		: '#6366f1');
 
-console.log('imgSRC: ', imgSrc);
 ---
 
 <div
 	class='group relative w-[332px] h-[246px] overflow-hidden rounded-xl bg-black'
 	data-portfolio-card
 	id={cardId}>
-	<img
+	<!-- <img
 		src={imgSrc}
 		alt={title}
 		crossorigin='anonymous'
@@ -40,7 +39,8 @@ console.log('imgSRC: ', imgSrc);
 		average-brightness={averageBrightness}
 		class='object-cover object-[center_0] h-[160px] w-[332px] bg-black'
 		data-portfolio-img
-	/>
+	/> -->
+  <Image src={imgSrc} alt={title} width={332} height={130} />
   <!-- <Image src={imgSrc} alt={title} /> -->
 	<div
 		style={`background: ${colorHex};`}
