@@ -56,7 +56,6 @@ const CONFIG = {
   FONT_PLACEHOLDER: '/* INTER_FONT_CSS_PLACEHOLDER */',
   PATHS: {
     FONT_CSS: 'index.css',
-    RESUME_STYLES: 'src/modules/resume-generator/resume-styles.css',
     SCREENSHOT_STYLES: 'src/modules/resume-generator/resume-screenshot-styles.css',
     OUTPUT_DIR: 'src/assets/pdf_output',
     HTML_OUTPUT: 'output.html',
@@ -96,17 +95,6 @@ async function loadInterFontCSS(projectRoot: string): Promise<string> {
     );
   } catch (error) {
     throw new Error(`Failed to load Inter font CSS: ${error}`);
-  }
-}
-
-async function loadAndProcessStyles(projectRoot: string, fontCSS: string): Promise<string> {
-  try {
-    const stylesPath = path.join(projectRoot, CONFIG.PATHS.RESUME_STYLES);
-    const rawStyles = await fs.readFile(stylesPath, 'utf8');
-    
-    return rawStyles.replace(CONFIG.FONT_PLACEHOLDER, fontCSS);
-  } catch (error) {
-    throw new Error(`Failed to load resume styles: ${error}`);
   }
 }
 
