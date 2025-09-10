@@ -19,6 +19,15 @@ interface Experience {
   achievements: string[];
 }
 
+interface Education {
+  institution: string;
+  fieldOfStudy: string;
+  degree?: string;
+  startDate: DateInfo;
+  endDate?: DateInfo;
+  location?: string;
+}
+
 interface BasicInfo {
   name: string;
   jobRole: string;
@@ -33,6 +42,7 @@ interface BasicInfo {
 interface ResumeData {
   basicInfo: BasicInfo;
   experience: Experience[];
+  education: Education[];
 }
 
 interface PdfOptions {
@@ -170,11 +180,35 @@ function renderExperienceItem(exp: Experience): string {
   `;
 }
 
+function renderEducationItem(edu: Education): string {
+  const endDateDisplay = edu.endDate 
+    ? `${edu.endDate.month} ${edu.endDate.year}`
+    : 'Present';
+    
+  return `
+    <div class="education-entry">
+      <div class="education-header">
+        <div>
+          <div class="education-degree">${edu.fieldOfStudy}${edu.degree ? ` in ${edu.degree}` : ''}</div>
+          <div class="education-school">${edu.institution}</div>
+        </div>
+        <div class="education-dates">
+          ${edu.startDate.month} ${edu.startDate.year} — ${endDateDisplay}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function generateResumeHTML(data: ResumeData): string {
-  const { basicInfo, experience } = data;
+  const { basicInfo, experience, education } = data;
   
   const experienceHTML = experience
     .map(renderExperienceItem)
+    .join('');
+  
+  const educationHTML = education
+    .map(renderEducationItem)
     .join('');
   
   const skillsHTML = `
@@ -187,27 +221,6 @@ function generateResumeHTML(data: ResumeData): string {
       <div class="skills-category">JAMstack</div>
       <div class="skills-category">PostgreSQL</div>
       <div class="skills-category"></div>
-    </div>
-  `;
-  
-  const educationHTML = `
-    <div class="education-entry">
-      <div class="education-header">
-        <div>
-          <div class="education-degree">Architectural Engineering in interior design</div>
-          <div class="education-school">Western Iowa Tech Community College</div>
-        </div>
-        <div class="education-dates">January 2009 — January 2011</div>
-      </div>
-    </div>
-    <div class="education-entry">
-      <div class="education-header">
-        <div>
-          <div class="education-degree">Architectural Engineering</div>
-          <div class="education-school">Iowa State University</div>
-        </div>
-        <div class="education-dates">January 2004 — January 2006</div>
-      </div>
     </div>
   `;
     
