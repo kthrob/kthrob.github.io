@@ -1,10 +1,11 @@
 ---
 import { twMerge } from 'tailwind-merge';
-import Image from '~/components/common/Image.astro';
+import { Image } from 'astro:assets';
 const {
 	title,
 	description,
-	imgSrc,
+	// imgSrc = await Astro.slots.render('imgSrc'),
+  imgSrc,
 	skills,
 	repoURL,
 	demoURL,
@@ -22,14 +23,14 @@ const colorHex =
 		? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)`
 		: '#6366f1');
 
-console.log(`Using color ${colorHex} for portfolio item: ${title}`);
+console.log('imgSRC: ', imgSrc);
 ---
 
 <div
 	class='group relative w-[332px] h-[246px] overflow-hidden rounded-xl bg-black'
 	data-portfolio-card
 	id={cardId}>
-	<!-- <img
+	<img
 		src={imgSrc}
 		alt={title}
 		crossorigin='anonymous'
@@ -39,20 +40,8 @@ console.log(`Using color ${colorHex} for portfolio item: ${title}`);
 		average-brightness={averageBrightness}
 		class='object-cover object-[center_0] h-[160px] w-[332px] bg-black'
 		data-portfolio-img
-	/> -->
-
-	<Image
-		src={imgSrc}
-		class='max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700'
-		widths={[400, 900]}
-		sizes='(max-width: 900px) 400px, 900px'
-		alt={title || ''}
-		width={900}
-		height={506}
-		loading='eager'
-		decoding='async'
 	/>
-
+  <!-- <Image src={imgSrc} alt={title} /> -->
 	<div
 		style={`background: ${colorHex};`}
 		class={twMerge(

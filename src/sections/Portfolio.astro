@@ -21,12 +21,10 @@ const {
 } = Astro.props;
 
 const portfolioData = await getCollection('portfolio')
+
+console.log("PORTFOLIO DATA: ", portfolioData)
 ---
 
-<!-- <section
-	id="portafolio"
-	class="flex flex-col w-full  justify-center items-center h-auto min-h-[100dvh]  "
-> -->
 <WidgetWrapper
 	id={id}
 	isDark={isDark}
@@ -39,7 +37,6 @@ const portfolioData = await getCollection('portfolio')
 		</div>
 	</div>
 </WidgetWrapper>
-<!-- </section> -->
 
 <style>
 	.portfolio__elements {
@@ -50,23 +47,3 @@ const portfolioData = await getCollection('portfolio')
 		gap: 4rem;
 	}
 </style>
-
-<!-- <script>
-	import { getIMGAverageColor } from '~/utils/average-img-color';
-
-	const $cards = document.querySelectorAll('[data-portfolio-card]');
-	$cards.forEach(card => {
-		const $container = card.querySelector<HTMLDivElement>(
-			'[data-portfolio-container]'
-		);
-		const $img = card.querySelector<HTMLImageElement>('[data-portfolio-img]');
-		if (!$img || !$container) return;
-
-		const setBg = () => {
-			const [rbgString] = getIMGAverageColor($img, 0.7);
-			$container.style.background = rbgString;
-		};
-		setBg();
-		$img.onload = setBg;
-	});
-</script> -->
