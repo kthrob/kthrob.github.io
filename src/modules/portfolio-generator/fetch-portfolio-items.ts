@@ -25,6 +25,7 @@ async function findProjectRoot() {
 const PROJECT_ROOT = await findProjectRoot();
 const PORTFOLIO_IMAGES_DIR = path.join(PROJECT_ROOT, 'src/assets/images/portfolio');
 const PORTFOLIO_CONTENT_DIR = path.join(PROJECT_ROOT, 'src/content/portfolio');
+const USE_CACHE = false;
 
 // Configuration options for screenshots
 const SCREENSHOT_OPTIONS = {
@@ -111,9 +112,9 @@ async function createContentEntry(item: any, screenshotPath: string) {
     const existingContent = JSON.parse(await fs.readFile(contentPath, 'utf8'));
     if (existingContent.averageColor) {
       console.log(`📄 Content entry already has average color: ${path.basename(contentPath)}`);
-      shouldUpdate = false;
+      shouldUpdate = !USE_CACHE
     } else {
-      console.log(`🔄 Updating content entry with average color: ${path.basename(contentPath)}`);
+      console.log(`🔄 Adding average color to content entry: ${path.basename(contentPath)}`);
     }
   } catch {
     // File doesn't exist, create it
@@ -142,6 +143,7 @@ async function captureAndSaveScreenshot(url: string, outputPath: string) {
       console.log(`📁 Screenshot already exists: ${path.basename(outputPath)}`);
       return true; // Skip capture, but consider it successful
     } catch {
+      console.log(`📁 Screenshot already exists: ${path.basename(outputPath)}`);
       // File doesn't exist, proceed with capture
     }
     

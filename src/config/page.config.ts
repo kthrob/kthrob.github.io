@@ -189,7 +189,7 @@ export const pageConfig: pageConfig = {
       title: "Test",
       type: "Website",
       description: "Test Portfolio entry",
-      webURL: 'https://www.apple.com'
+      webURL: 'https://www.orangetheory.com/en-us'
     },
     {
       title: "Screwfast",

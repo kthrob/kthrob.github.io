@@ -121,7 +121,6 @@ import { UI } from 'promethic:config';
 
     function applyHeaderStylesOnScroll() {
       const header = document.querySelector('#header[data-aw-sticky-header]');
-      console.log('Header: ', header);
       if (!header) return;
       if (lastKnownScrollPosition > 60 && !header.classList.contains('scroll')) {
         header.classList.add('scroll');

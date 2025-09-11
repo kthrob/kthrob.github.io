@@ -1,11 +1,11 @@
 ---
 import { twMerge } from 'tailwind-merge';
-import Image from '~/components/common/Image.astro'
+import Image from '~/components/common/Image.astro';
 const {
 	title,
 	description,
 	// imgSrc = await Astro.slots.render('imgSrc'),
-  imgSrc,
+	imgSrc,
 	skills,
 	repoURL,
 	demoURL,
@@ -22,7 +22,6 @@ const colorHex =
 	(averageBrightness !== undefined
 		? `hsl(220, 20%, ${Math.round(averageBrightness * 100)}%)`
 		: '#6366f1');
-
 ---
 
 <div
@@ -40,8 +39,13 @@ const colorHex =
 		class='object-cover object-[center_0] h-[160px] w-[332px] bg-black'
 		data-portfolio-img
 	/> -->
-  <Image src={imgSrc} alt={title} width={332} height={130} />
-  <!-- <Image src={imgSrc} alt={title} /> -->
+	<Image
+		src={imgSrc}
+		alt={title}
+		width={332}
+		height={160}
+	/>
+	<!-- <Image src={imgSrc} alt={title} /> -->
 	<div
 		style={`background: ${colorHex};`}
 		class={twMerge(
