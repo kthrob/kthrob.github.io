@@ -5,6 +5,7 @@ import Hero from '~/components/sections/Hero.astro';
 import Portfolio from '~/sections/Portfolio.astro';
 import Resume from '~/components/sections/Resume.astro';
 import Carousel from '~/components/sections/skills/Carousel.astro';
+import Insights from '~/sections/Insights.astro'
 
 import { logos } from '~/components/data/logos';
 ---
@@ -14,5 +15,6 @@ import { logos } from '~/components/data/logos';
 	<Hero />
 	<Carousel tools={logos} />
 	<Portfolio title="My Work" subtitle="Projects I've Done" tagline="A showcase of my work" />
+  <Insights title="Insights" subtitle="Some stuff to know" tagline="Not quite a blog" />
 	<Resume />
 </Layout_Custom>
