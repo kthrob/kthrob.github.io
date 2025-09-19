@@ -24,7 +24,7 @@
     }
   }
 
-  --animate-fade: fadeInUp 1s both;
+  --animate-fade: fadeInUp 2s both;
 
   @keyframes fadeInUp {
     0% {
@@ -37,6 +37,10 @@
       opacity: 1;
     }
   }
+}
+
+.fade-up {
+  @apply intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade
 }
 
 .scrollbar-hide::-webkit-scrollbar {

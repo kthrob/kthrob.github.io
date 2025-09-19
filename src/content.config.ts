@@ -1,9 +1,9 @@
 // https://docs.astro.build/en/guides/content-collections/#defining-collections
 
-import { defineCollection, z } from 'astro:content';
-import { file, glob } from 'astro/loaders';
+import { defineCollection, z } from "astro:content";
+import { file, glob } from "astro/loaders";
 
-import colors from 'tailwindcss/colors';
+import colors from "tailwindcss/colors";
 
 const metadataDefinition = () =>
   z
@@ -32,7 +32,7 @@ const metadataDefinition = () =>
                 url: z.string(),
                 width: z.number().optional(),
                 height: z.number().optional(),
-              })
+              }),
             )
             .optional(),
           locale: z.string().optional(),
@@ -49,7 +49,6 @@ const metadataDefinition = () =>
         .optional(),
     })
     .optional();
-
 
 // const navLinks = defineCollection({
 //   loader: file('./src/content/navigation/navigation.json', { parser: (text) => JSON.parse(text).navBarLinks }),
@@ -99,13 +98,9 @@ const metadataDefinition = () =>
 //   ),
 // });
 
-
-
-
-
 // from sf
 const blogCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -131,12 +126,11 @@ const blogsCollection = defineCollection({
     datetime: z.string(),
     image: z.string().optional(),
   }),
-
 });
 
 // from aw
 const postCollection = defineCollection({
-  loader: glob({ pattern: [ '*.md', '*.mdx' ], base: 'src/content/post' }),
+  loader: glob({ pattern: ["*.md", "*.mdx"], base: "src/content/post" }),
   schema: z.object({
     publishDate: z.date().optional(),
     updateDate: z.date().optional(),
@@ -157,8 +151,8 @@ const postCollection = defineCollection({
 // from sf
 const insightsCollection = defineCollection({
   loader: glob({
-    pattern: '**/[^_]*.{md,mdx}',
-    base: './src/content/insights',
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/insights",
   }),
   schema: ({ image }) =>
     z.object({
@@ -172,8 +166,8 @@ const insightsCollection = defineCollection({
 
 const siteConfiguration = defineCollection({
   loader: glob({
-    pattern: '**/[^_]*.{md,mdx,yaml,json}',
-    base: './src/content/config/site',
+    pattern: "**/[^_]*.{md,mdx,yaml,json}",
+    base: "./src/content/config/site",
   }),
   // schema: z.object({
   //   name: z.string(),
@@ -182,8 +176,8 @@ const siteConfiguration = defineCollection({
 
 const portfolioCollection = defineCollection({
   loader: glob({
-    pattern: '**/[^_]*.{md,mdx,json}',
-    base: './src/content/portfolio',
+    pattern: "**/[^_]*.{md,mdx,json}",
+    base: "./src/content/portfolio",
   }),
   schema: z.object({
     imgSrc: z.string(),
