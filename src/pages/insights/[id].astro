@@ -172,11 +172,15 @@ const ogTitle = `${post.data.title} | Insights | ${SITE.title}`;
 		const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
 		if (articleHeight && articleOffsetTop) {
-			const progress = Math.max(0, Math.min(100,
-				((scrollTop - articleOffsetTop) /
-					(articleHeight - window.innerHeight)) *
-				100
-			));
+			const progress = Math.max(
+				0,
+				Math.min(
+					100,
+					((scrollTop - articleOffsetTop) /
+						(articleHeight - window.innerHeight)) *
+						100
+				)
+			);
 
 			const progressBar = document.getElementById('progress');
 			const progressBarMobile =
@@ -225,134 +229,192 @@ const ogTitle = `${post.data.title} | Insights | ${SITE.title}`;
 		activeHeadingId = id;
 	}
 
-		function initializeToC() {
-			// Get core elements
-			const article: HTMLElement | null = document.querySelector('article');
-			const tocList: HTMLElement | null = document.querySelector('#toc ul');
-			const pinElement: HTMLElement | null = document.getElementById('pin');
-			const footer: HTMLElement | null = document.querySelector('footer');
+	function initializeToC() {
+		// Get core elements
+		const article: HTMLElement | null = document.querySelector('article');
+		const tocList: HTMLElement | null = document.querySelector('#toc ul');
+		const pinElement: HTMLElement | null = document.getElementById('pin');
+		const footer: HTMLElement | null = document.querySelector('footer');
 
-			if (!article || !tocList) {
-				// If elements not found, try again after a short delay
-				setTimeout(initializeToC, 100);
-				return;
-			}
-
-			// Clear existing ToC items (in case of re-initialization)
-			tocList.innerHTML = '';
-
-			// Get all headings from article
-			const headings: HTMLElement[] = Array.from(
-				article.querySelectorAll('h1, h2, h3, h4, h5, h6')
-			);
-
-			if (headings.length === 0) {
-				return; // No headings found
-			}
-
-			// Build ToC structure
-			headings.forEach((heading) => {
-				if (heading instanceof HTMLElement && heading.id) {
-					const listItem = document.createElement('li');
-					listItem.className = 'toc-level-' + heading.tagName.toLowerCase();
-
-					// Add SVG icon
-					const tempDiv = document.createElement('div');
-					tempDiv.innerHTML = SVG_HTML_STRING;
-					const svg = tempDiv.firstChild;
-					listItem.appendChild(svg as Node);
-
-					// Add link
-					const link = document.createElement('a');
-					link.href = '#' + heading.id;
-					link.textContent = heading.textContent;
-					listItem.appendChild(link);
-
-					tocList.appendChild(listItem);
-				}
-			});
-
-			// Use CSS sticky positioning instead of complex JS pinning
-			if (pinElement) {
-				// Apply sticky positioning
-				pinElement.style.position = 'sticky';
-				pinElement.style.top = '20vh'; // 20% from top
-				pinElement.style.alignSelf = 'flex-start';
-				pinElement.style.zIndex = '10';
-			}
-
-			// Simple intersection observer for heading visibility
-			const observerOptions = {
-				rootMargin: '0px 0px -50% 0px', // Trigger when heading reaches middle of viewport
-				threshold: 0.1
-			};
-
-			let activeHeading: HTMLElement | null = null;
-
-			const headingObserver = new IntersectionObserver((entries) => {
-				// Sort entries by their position in document (top to bottom)
-				const sortedEntries = entries.sort((a, b) => {
-					const aIndex = headings.indexOf(a.target as HTMLElement);
-					const bIndex = headings.indexOf(b.target as HTMLElement);
-					return aIndex - bIndex;
-				});
-
-				// Find the first intersecting heading (closest to top)
-				for (const entry of sortedEntries) {
-					if (entry.isIntersecting) {
-						const heading = entry.target as HTMLElement;
-						if (heading !== activeHeading) {
-							activeHeading = heading;
-							setActiveLinkById(heading.id);
-							console.log('Active heading:', heading.textContent);
-							break;
-						}
-					}
-				}
-			}, observerOptions);
-
-			// Observe all headings
-			headings.forEach(heading => {
-				headingObserver.observe(heading);
-			});
-
-			// Handle scroll to highlight last section when at bottom
-			let scrollTimeout: number;
-			window.addEventListener('scroll', () => {
-				clearTimeout(scrollTimeout);
-				scrollTimeout = setTimeout(() => {
-					const scrollY = window.scrollY;
-					const windowHeight = window.innerHeight;
-					const docHeight = document.documentElement.scrollHeight;
-					
-					// If near bottom of page, highlight last heading
-					if (scrollY + windowHeight >= docHeight - 100) {
-						const lastHeading = headings[headings.length - 1];
-						if (lastHeading && lastHeading !== activeHeading) {
-							activeHeading = lastHeading;
-							setActiveLinkById(lastHeading.id);
-							console.log('At bottom, active heading:', lastHeading.textContent);
-						}
-					}
-				}, 100);
-			});
-
-			// Smooth scroll behavior for ToC links
-			document.querySelectorAll('#toc a').forEach(link => {
-				link.addEventListener('click', (e) => {
-					e.preventDefault();
-					const targetId = (e.target as HTMLAnchorElement).getAttribute('href')?.slice(1);
-					if (targetId) {
-						const targetElement = document.getElementById(targetId);
-						if (targetElement) {
-							targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-							// Update active link immediately
-							setActiveLinkById(targetId);
-						}
-					}
-				});
-			});
+		if (!article || !tocList) {
+			// If elements not found, try again after a short delay
+			setTimeout(initializeToC, 100);
+			return;
 		}
+
+		// Clear existing ToC items (in case of re-initialization)
+		tocList.innerHTML = '';
+
+		// Get all headings from article
+		const headings: HTMLElement[] = Array.from(
+			article.querySelectorAll('h1, h2, h3, h4, h5, h6')
+		);
+
+		if (headings.length === 0) {
+			return; // No headings found
+		}
+
+		// Build ToC structure
+		headings.forEach(heading => {
+			if (heading instanceof HTMLElement && heading.id) {
+				const listItem = document.createElement('li');
+				listItem.className =
+					'toc-level-' + heading.tagName.toLowerCase();
+
+				// Add SVG icon
+				const tempDiv = document.createElement('div');
+				tempDiv.innerHTML = SVG_HTML_STRING;
+				const svg = tempDiv.firstChild;
+				listItem.appendChild(svg as Node);
+
+				// Add link
+				const link = document.createElement('a');
+				link.href = '#' + heading.id;
+				link.textContent = heading.textContent;
+				listItem.appendChild(link);
+
+				tocList.appendChild(listItem);
+			}
+		});
+
+		// Add placeholder div after article to ensure last heading can be properly highlighted
+		const placeholder = document.createElement('div');
+		placeholder.id = 'article-end-placeholder';
+		placeholder.style.height = '30vh'; // Just enough space for last section to reach trigger point
+		placeholder.style.visibility = 'hidden';
+		article.appendChild(placeholder);
+
+		// Use CSS sticky positioning instead of complex JS pinning
+		if (pinElement) {
+			// Apply sticky positioning
+			pinElement.style.position = 'sticky';
+			pinElement.style.top = '20vh'; // 20vh from top - this is our universal trigger point
+			pinElement.style.alignSelf = 'flex-start';
+			pinElement.style.zIndex = '10';
+		}
+
+		// Comprehensive ToC highlighting system
+		let activeHeading: HTMLElement | null = null;
+		let isUserScrolling = true; // Start as true to prevent initial highlighting
+		let scrollTimeout: number;
+		let clickTimeout: number;
+
+		// Calculate which heading should be active based on scroll position
+		function calculateActiveHeading(): HTMLElement | null {
+			// Use 20vh as trigger point to match ToC pin position
+			const triggerPoint = window.innerHeight * 0.2; // 20vh from top
+
+			// Check if we're at the very top (before any content)
+			if (window.scrollY < 50) {
+				return null; // No active heading at the top
+			}
+
+			// Find the heading that should be active
+			let candidate: HTMLElement | null = null;
+
+			// Check each heading from top to bottom
+			for (let i = 0; i < headings.length; i++) {
+				const heading = headings[i];
+				const rect = heading.getBoundingClientRect();
+
+				// If heading is above or at the trigger point (20vh)
+				if (rect.top <= triggerPoint) {
+					candidate = heading;
+				} else {
+					// Found first heading below trigger point, stop
+					break;
+				}
+			}
+
+			// Special handling for last section:
+			// Once the last heading reaches the trigger point, it stays active
+			// even if there's more content below (no placeholder needed)
+			if (candidate === headings[headings.length - 1]) {
+				// Last heading is active, keep it active regardless of scroll position
+				return candidate;
+			}
+
+			return candidate;
+		}
+
+		// Update active heading
+		function updateActiveHeading() {
+			if (!isUserScrolling) return; // Don't update during programmatic scrolling
+
+			const newActiveHeading = calculateActiveHeading();
+
+			if (newActiveHeading !== activeHeading) {
+				activeHeading = newActiveHeading;
+
+				if (activeHeading) {
+					setActiveLinkById(activeHeading.id);
+					console.log('Active heading:', activeHeading.textContent);
+				} else {
+					setActiveLinkById(null);
+					console.log('No active heading');
+				}
+			}
+		}
+
+		// Handle scroll events
+		window.addEventListener('scroll', () => {
+			clearTimeout(scrollTimeout);
+			isUserScrolling = true;
+
+			scrollTimeout = setTimeout(() => {
+				updateActiveHeading();
+			}, 50);
+		});
+
+		// Initial check (but don't highlight anything on page load)
+		setTimeout(() => {
+			// Only highlight if user has scrolled from the initial position
+			if (window.scrollY > 100) {
+				updateActiveHeading();
+			}
+		}, 500);
+
+		// Smooth scroll behavior for ToC links
+		document.querySelectorAll('#toc a').forEach(link => {
+			link.addEventListener('click', e => {
+				e.preventDefault();
+				const targetId = (e.target as HTMLAnchorElement)
+					.getAttribute('href')
+					?.slice(1);
+				if (targetId) {
+					const targetElement = document.getElementById(targetId);
+					if (targetElement) {
+						// Disable user scrolling detection during programmatic scroll
+						isUserScrolling = false;
+
+						// Calculate scroll position to place heading at 20vh from top (same as ToC pin point)
+						const viewportHeight = window.innerHeight;
+						const targetOffset = viewportHeight * 0.2; // 20vh from top - matches ToC trigger
+						const elementTop =
+							targetElement.getBoundingClientRect().top +
+							window.scrollY;
+						const scrollToPosition = elementTop - targetOffset;
+
+						// Scroll to the calculated position
+						window.scrollTo({
+							top: Math.max(0, scrollToPosition),
+							behavior: 'smooth'
+						});
+
+						// Set active link immediately
+						activeHeading = targetElement as HTMLElement;
+						setActiveLinkById(targetId);
+
+						// Re-enable user scrolling detection after scroll completes
+						clearTimeout(clickTimeout);
+						clickTimeout = setTimeout(() => {
+							isUserScrolling = true;
+						}, 1000); // Wait for smooth scroll to complete
+					}
+				}
+			});
+		});
+	}
 
 	// Initialize on various load events to handle different navigation scenarios
 	if (document.readyState === 'loading') {
@@ -364,7 +426,7 @@ const ogTitle = `${post.data.title} | Insights | ${SITE.title}`;
 
 	// Also handle Astro's client-side navigation
 	document.addEventListener('astro:page-load', initializeToC);
-	
+
 	// Reinitialize on history navigation
 	window.addEventListener('popstate', () => {
 		setTimeout(initializeToC, 100);
