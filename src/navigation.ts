@@ -4,32 +4,8 @@ export const headerData = {
   links: [
     { text: 'Home', href: getPermalink('/') },
     { text: 'About', href: getPermalink('/about') },
-    { text: 'Portfolio', href: getPermalink('/portfolio') },
-    {
-      text: 'Blog',
-      links: [
-        {
-          text: 'Blog List',
-          href: getBlogPermalink(),
-        },
-        {
-          text: 'Article',
-          href: getPermalink('get-started-website-with-astro-tailwind-css', 'post'),
-        },
-        {
-          text: 'Article (with MDX)',
-          href: getPermalink('markdown-elements-demo-post', 'post'),
-        },
-        {
-          text: 'Category Page',
-          href: getPermalink('tutorials', 'category'),
-        },
-        {
-          text: 'Tag Page',
-          href: getPermalink('astro', 'tag'),
-        },
-      ],
-    }
+    { text: 'Portfolio', href: getPermalink('#portfolio') },
+    { text: 'Blog', href: getBlogPermalink() }
   ],
   actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
 };
