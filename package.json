@@ -22,6 +22,7 @@
     "astro-embed": "^0.9.0",
     "astro-icon": "^1.1.1",
     "capture-website": "^4.2.0",
+    "clipboard": "^2.0.11",
     "debug": "^4.4.1",
     "fast-average-color": "^9.5.0",
     "fast-average-color-node": "^3.1.0",
