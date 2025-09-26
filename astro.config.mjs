@@ -10,6 +10,8 @@ import sitemap from '@astrojs/sitemap';
 import path from "path";
 import promethic from "./vendor/integration";
 
+import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin, lazyImagesRehypePlugin } from './src/utils/frontmatter';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
@@ -36,6 +38,10 @@ export default defineConfig({
   }), promethic({
     config: "./src/config.yaml",
   }) ],
+  markdown: {
+    remarkPlugins: [ readingTimeRemarkPlugin ],
+    rehypePlugins: [ responsiveTablesRehypePlugin, lazyImagesRehypePlugin ],
+  },
   vite: {
     resolve: {
       alias: {
