@@ -11,6 +11,7 @@
         "@astrolib/seo": "^1.0.0-beta.8",
         "@fontsource-variable/inter": "^5.2.6",
         "@tailwindcss/vite": "^4.1.11",
+        "@tailwindplus/elements": "^1.0.14",
         "astro": "5.13.5",
         "astro-embed": "^0.9.0",
         "astro-icon": "^1.1.1",
@@ -378,6 +379,8 @@
     "@tailwindcss/typography": ["@tailwindcss/typography@0.5.16", "", { "dependencies": { "lodash.castarray": "^4.4.0", "lodash.isplainobject": "^4.0.6", "lodash.merge": "^4.6.2", "postcss-selector-parser": "6.0.10" }, "peerDependencies": { "tailwindcss": ">=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1" } }, "sha512-0wDLwCVF5V3x3b1SGXPCDcdsbDHMBe+lkFzBRaHeLvNi+nrrnZ1lA18u+OTWO8iSWU2GxUOCvlXtDuqftc1oiA=="],
 
     "@tailwindcss/vite": ["@tailwindcss/vite@4.1.13", "", { "dependencies": { "@tailwindcss/node": "4.1.13", "@tailwindcss/oxide": "4.1.13", "tailwindcss": "4.1.13" }, "peerDependencies": { "vite": "^5.2.0 || ^6 || ^7" } }, "sha512-0PmqLQ010N58SbMTJ7BVJ4I2xopiQn/5i6nlb4JmxzQf8zcS5+m2Cv6tqh+sfDwtIdjoEnOvwsGQ1hkUi8QEHQ=="],
+
+    "@tailwindplus/elements": ["@tailwindplus/elements@1.0.14", "", {}, "sha512-TbQH+tlwGRQYlshlv/sk2y9+ntpn8Z8NHZgo01cWpke0Ort7gJzLLQOiDwIag1Iy68xVZrbjb8oqWYvjboJwcg=="],
 
     "@tootallnate/quickjs-emscripten": ["@tootallnate/quickjs-emscripten@0.23.0", "", {}, "sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA=="],
 
