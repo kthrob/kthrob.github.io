@@ -11,7 +11,7 @@ import { SITE } from 'promethic:config';
 
 // Get all blogs post in English and sort them based on publish date
 
-const englishBlogEntries = await getCollection('blog', ({ id }) => {
+const englishBlogEntries = await getCollection('blogs', ({ id }) => {
 	return id.startsWith('en/');
 });
 
@@ -19,16 +19,17 @@ const englishInsightsEntries = await getCollection('insights', ({ id }) => {
 	return id.startsWith('en/');
 });
 
-const blogPosts: CollectionEntry<'blog'>[] = englishBlogEntries.sort(
-	(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
-		b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+const blogPosts: CollectionEntry<'blogs'>[] = englishBlogEntries.sort(
+	(a: CollectionEntry<'blogs'>, b: CollectionEntry<'blogs'>) =>
+		b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
 // Get all insights posts
 const insightPosts: CollectionEntry<'insights'>[] = englishInsightsEntries;
 
 // Separate the most recent post from others
-const mostRecentPost: CollectionEntry<'blog'> = blogPosts[0];
-const otherPosts: CollectionEntry<'blog'>[] = blogPosts.slice(1);
+const mostRecentPost: CollectionEntry<'blogs'> = blogPosts[0];
+
+const otherPosts: CollectionEntry<'blogs'>[] = blogPosts.slice(1);
 
 // Define variables for page content
 const title: string = 'Your Gateway to Construction Excellence';

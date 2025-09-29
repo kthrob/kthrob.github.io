@@ -4,6 +4,7 @@
 import Layout from '@/layouts/Layout_Custom.astro';
 import AvatarBlogLarge from '@/components/ui/avatars/AvatarBlogLarge.astro';
 import CardRelated from '@/components/ui/cards/CardRelated.astro';
+import RelatedPosts from '~/components/blog/RelatedPosts.astro';
 import Bookmark from '@/components/ui/buttons/Bookmark.astro';
 import SocialShare from '@/components/ui/buttons/SocialShare_Custom.astro';
 import PostFeedback from '@/components/ui/feedback/PostFeedback.astro';
@@ -15,9 +16,10 @@ import { SITE } from 'promethic:config';
 
 // Update getStaticPaths for English posts
 export async function getStaticPaths() {
-	const blogPosts = await getCollection('blog', ({ id }) =>
+	const blogPosts = await getCollection('blogs', ({ id }) =>
 		id.startsWith('en/')
 	);
+	console.log('blogPosts in getStaticPaths [id].astro:', blogPosts);
 	return blogPosts.map(post => {
 		const idWithoutLang = post.id.replace(/^en\//, ''); // Remove the "en/" prefix
 		return {
@@ -30,6 +32,7 @@ export async function getStaticPaths() {
 // Get the current post's data
 const { post } = Astro.props;
 
+console.log('POST param from [id].astro:', post);
 const blogPosts: CollectionEntry<'blog'>[] = await getCollection(
 	'blog',
 	({ id }) => id.startsWith('en/')
@@ -45,8 +48,8 @@ const relatedPosts: CollectionEntry<'blog'>[] = blogPosts.filter(
 
 const pageTitle: string = `${post.data.title} | ${SITE.title}`;
 // For the meta description, use the first paragraph of content if available
-const metaDescription =
-	post.data.contents[0] || `Read ${post.data.title} on ScrewFast's blog`;
+// const metaDescription =
+// 	post.data.contents[0] || `Read ${post.data.title} on ScrewFast's blog`;
 const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
 ---
 
@@ -95,8 +98,17 @@ const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
 								<ul class='text-xs text-neutral-500'>
 									<li
 										class='relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600'>
-										{formatDate(post.data.pubDate)}
+										{formatDate(post.data.publishDate)}
 									</li>
+									{
+										post.readingTime && (
+											<>
+												&nbsp;·{' '}
+												<span>{post.readingTime}</span>{' '}
+												min read
+											</>
+										)
+									}
 									<li
 										class='relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600'>
 										{post.data.readTime} min read
@@ -169,8 +181,9 @@ const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
 		/>
 	</section>
 
+	<RelatedPosts post={relatedPosts} />
 	{/* Related articles section */}
-	<section class='mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14'>
+	<!-- <section class='mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14'>
 		<div class='mb-10 max-w-2xl'>
 			<h2
 				class='text-2xl font-bold text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200'>
@@ -181,6 +194,6 @@ const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
 		<div class='grid grid-cols-2 gap-6'>
 			{relatedPosts.map(entry => <CardRelated blogEntry={entry} />)}
 		</div>
-	</section>
+	</section> -->
 </Layout>
 <!-- </MainLayout> -->

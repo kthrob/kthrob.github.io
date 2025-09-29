@@ -118,34 +118,32 @@ const blogCollection = defineCollection({
     }),
 });
 
-// from resume-theme
-const blogsCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    datetime: z.string(),
-    image: z.string().optional(),
-  }),
-});
-
 // from aw
-const postCollection = defineCollection({
-  loader: glob({ pattern: ["*.md", "*.mdx"], base: "src/content/post" }),
-  schema: z.object({
-    publishDate: z.date().optional(),
-    updateDate: z.date().optional(),
-    draft: z.boolean().optional(),
+const blogsCollection = defineCollection({
+  // loader: glob({ pattern: [ "*.md", "*.mdx" ], base: "src/content/post" }),
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/post" }),
+  schema: ({ image }) =>
+    z.object({
+      publishDate: z.date(),
+      updateDate: z.date().optional(),
+      draft: z.boolean().optional(),
 
-    title: z.string(),
-    excerpt: z.string().optional(),
-    image: z.string().optional(),
+      title: z.string(),
+      description: z.string(),
+      excerpt: z.string().optional(),
+      image: z.string().optional(),
+      cardImage: image(),
+      cardImageAlt: z.string(),
+      category: z.string().optional(),
+      tags: z.array(z.string()).optional(),
 
-    category: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    author: z.string().optional(),
-
-    metadata: metadataDefinition(),
-  }),
+      author: z.string().optional(),
+      role: z.string().optional(),
+      authorImage: image(),
+      authorImageAlt: z.string(),
+      
+      metadata: metadataDefinition(),
+    }),
 });
 
 // from sf
@@ -193,7 +191,6 @@ const portfolioCollection = defineCollection({
 });
 
 export const collections = {
-  post: postCollection,
   site: siteConfiguration,
   blog: blogCollection,
   blogs: blogsCollection,
