@@ -3,14 +3,13 @@ import { getCollection } from 'astro:content';
 import { getPortafolioData } from '~/components/data/portfolioData.js';
 import Card from '~/components/sections/portfolio/card-portfolio/CardPortfolio.astro';
 import WidgetWrapper from '~/components/WidgetWrapper.astro';
-import Headline from '~/components/ui/Headline.astro';
+import Headline from '~/components/blog/Headline.astro';
 import CardInsight from '~/components/ui/cards/CardInsight.astro';
 import type { CollectionEntry } from 'astro:content';
 
 const {
 	title = await Astro.slots.render('title'),
 	subtitle = await Astro.slots.render('subtitle'),
-	tagline = await Astro.slots.render('tagline'),
 	items = [],
 	columns = 2,
 
@@ -41,12 +40,7 @@ const insightPosts: CollectionEntry<'insights'>[] = englishInsightsEntries;
 		<p class='mt-1 text-pretty text-neutral-600 dark:text-neutral-400'>
 			{secondSubTitle}
 		</p> -->
-		<Headline
-			{title}
-			{subtitle}
-			{tagline}
-			classes={{ container: classes?.headline ?? '' }}
-		/>
+		<Headline subtitle={subtitle}>{title}</Headline>
 	</div>
 	<div class='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
 		{

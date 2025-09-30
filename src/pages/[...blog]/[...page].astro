@@ -1,18 +1,21 @@
 ---
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
-
+import CardBlogRecent from '@/components/ui/cards/CardBlogRecent.astro';
 import Layout from '~/layouts/PageLayout.astro';
-import BlogList from '~/components/blog/List.astro';
+import BlogList from '~/components/blog/BlogList.astro';
+import Insights from '~/sections/Insights.astro';
 import Headline from '~/components/blog/Headline.astro';
 import Pagination from '~/components/blog/Pagination.astro';
+import RecentPost from '~/components/blog/RecentPosts.astro';
 // import PostTags from "~/components/blog/Tags.astro";
-
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
 
 export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
-  return await getStaticPathsBlogList({ paginate });
+	return await getStaticPathsBlogList({ paginate });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -24,29 +27,54 @@ const currentPage = page.currentPage ?? 1;
 // const allTags = await findTags();
 
 const metadata = {
-  title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
-  robots: {
-    index: blogListRobots?.index && currentPage === 1,
-    follow: blogListRobots?.follow,
-  },
-  openGraph: {
-    type: 'blog',
-  },
+	title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
+	robots: {
+		index: blogListRobots?.index && currentPage === 1,
+		follow: blogListRobots?.follow
+	},
+	openGraph: {
+		type: 'blog'
+	}
 };
+
+const englishBlogEntries = await getCollection('blogs', ({ id }) => {
+	return id.startsWith('en/');
+});
+
+const englishInsightsEntries = await getCollection('insights', ({ id }) => {
+	return id.startsWith('en/');
+});
+
+const blogPosts: CollectionEntry<'blogs'>[] = englishBlogEntries.sort(
+	(a: CollectionEntry<'blogs'>, b: CollectionEntry<'blogs'>) =>
+		b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+
+const mostRecentPost: CollectionEntry<'blogs'> = blogPosts[0];
+
+console.log('Most recent post in [..page].astro:', mostRecentPost);
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline
-      subtitle="A statically generated blog example with news, tutorials, resources and other interesting content related to AstroWind"
-    >
-      The Blog
-    </Headline>
-    <BlogList posts={page.data} />
-    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-    <!--
+	<!-- <section
+		class='px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-[85rem] 2xl:max-w-full'> -->
+	<BlogList 
+    title="Blog"
+    subTitle="Explore the latest news, tips, and insights from ScrewFast to enhance your"
+    posts={page.data} 
+  />
+	<RecentPost blogEntry={mostRecentPost} />
+	<Insights
+		title='Insights'
+		subtitle='Some stuff to know'
+	/>
+	<Pagination
+		prevUrl={page.url.prev}
+		nextUrl={page.url.next}
+	/>
+	<!--
       <PostTags tags={allCategories} class="mb-2" title="Search by Categories:" isCategory />
       <PostTags tags={allTags}  title="Search by Tags:" />
     -->
-  </section>
+	<!-- </section> -->
 </Layout>

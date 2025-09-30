@@ -138,6 +138,7 @@ const blogsCollection = defineCollection({
       tags: z.array(z.string()).optional(),
 
       author: z.string().optional(),
+      
       role: z.string().optional(),
       authorImage: image(),
       authorImageAlt: z.string(),

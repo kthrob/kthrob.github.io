@@ -4,44 +4,49 @@ import type { HTMLAttributes, ImageMetadata } from 'astro/types';
 export interface Post {
   /** A unique ID number that identifies a post. */
   id: string;
+  data: {
+    /** A post’s unique slug – part of the post’s URL based on its name, i.e. a post called “My Sample Page” has a slug “my-sample-page”. */
+    slug: string;
 
-  /** A post’s unique slug – part of the post’s URL based on its name, i.e. a post called “My Sample Page” has a slug “my-sample-page”. */
-  slug: string;
+    /**  */
+    permalink: string;
 
-  /**  */
-  permalink: string;
+    /**  */
+    publishDate: Date;
+    /**  */
+    updateDate?: Date;
 
-  /**  */
-  publishDate: Date;
-  /**  */
-  updateDate?: Date;
+    /**  */
+    title: string;
+    description?: string;
+    /** Optional summary of post content. */
+    excerpt?: string;
+    /**  */
+    image?: ImageMetadata | string;
+    cardImage?: ImageMetadata | string;
+    cardImageAlt?: string;
+    /**  */
+    category?: Taxonomy;
+    /**  */
+    tags?: Taxonomy[];
+    /**  */
+    author?: string;
+    authorImage?: ImageMetadata | string;
+    authorImageAlt?: string;
 
-  /**  */
-  title: string;
-  /** Optional summary of post content. */
-  excerpt?: string;
-  /**  */
-  image?: ImageMetadata | string;
+    /**  */
+    metadata?: MetaData;
 
-  /**  */
-  category?: Taxonomy;
-  /**  */
-  tags?: Taxonomy[];
-  /**  */
-  author?: string;
+    /**  */
+    draft?: boolean;
 
-  /**  */
-  metadata?: MetaData;
+    /**  */
+    Content?: AstroComponentFactory;
+    content?: string;
 
-  /**  */
-  draft?: boolean;
-
-  /**  */
-  Content?: AstroComponentFactory;
-  content?: string;
-
-  /**  */
-  readingTime?: number;
+    /**  */
+    readingTime?: number;
+  }
 }
 
 export interface Taxonomy {
@@ -278,4 +283,4 @@ export interface Content extends Omit<Headline, 'classes'>, Widget {
   callToAction?: CallToAction;
 }
 
-export interface Contact extends Omit<Headline, 'classes'>, Form, Widget {}
+export interface Contact extends Omit<Headline, 'classes'>, Form, Widget { }

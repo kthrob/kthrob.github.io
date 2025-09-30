@@ -40,19 +40,24 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
+const getNormalizedPost = async (post: CollectionEntry<'blogs'>): Promise<Post> => {
   const { id, data } = post;
   const { Content, remarkPluginFrontmatter } = await render(post);
 
   const {
     publishDate: rawPublishDate = new Date(),
     updateDate: rawUpdateDate,
+    author,
+    authorImage,
+    authorImageAlt,
+    cardImage,
+    cardImageAlt,
     title,
+    description,
     excerpt,
     image,
     tags: rawTags = [],
     category: rawCategory,
-    author,
     draft = false,
     metadata = {},
   } = data;
@@ -63,9 +68,9 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
 
   const category = rawCategory
     ? {
-        slug: cleanSlug(rawCategory),
-        title: rawCategory,
-      }
+      slug: cleanSlug(rawCategory),
+      title: rawCategory,
+    }
     : undefined;
 
   const tags = rawTags.map((tag: string) => ({
@@ -75,33 +80,41 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
 
   return {
     id: id,
-    slug: slug,
-    permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
+    data: {
+      slug: slug,
+      permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
 
-    publishDate: publishDate,
-    updateDate: updateDate,
+      publishDate: publishDate,
+      updateDate: updateDate,
 
-    title: title,
-    excerpt: excerpt,
-    image: image,
+      title: title,
+      description: description,
+      excerpt: excerpt,
+      image: image,
 
-    category: category,
-    tags: tags,
-    author: author,
+      cardImage: cardImage || image,
+      cardImageAlt: cardImageAlt || (typeof image === 'string' ? image : undefined) || authorImageAlt || undefined,
 
-    draft: draft,
+      category: category,
+      tags: tags,
+      author: author,
+      authorImage: authorImage,
+      authorImageAlt: authorImageAlt || (typeof authorImage === 'string' ? authorImage : undefined) || undefined,
 
-    metadata,
+      draft: draft,
 
-    Content: Content,
-    // or 'content' in case you consume from API
+      metadata,
 
-    readingTime: remarkPluginFrontmatter?.readingTime,
+      Content: Content,
+      // or 'content' in case you consume from API
+
+      readingTime: remarkPluginFrontmatter?.readingTime,
+    }
   };
 };
 
 const load = async (): Promise<Array<Post>> => {
-  const posts = await getCollection('post');
+  const posts = await getCollection('blogs');
   const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedPosts))
@@ -197,7 +210,7 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
   const categories = {};
   posts.map((post) => {
     if (post.category?.slug) {
-      categories[post.category?.slug] = post.category;
+      categories[ post.category?.slug ] = post.category;
     }
   });
 
@@ -207,7 +220,7 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
       {
         params: { category: categorySlug, blog: CATEGORY_BASE || undefined },
         pageSize: blogPostsPerPage,
-        props: { category: categories[categorySlug] },
+        props: { category: categories[ categorySlug ] },
       }
     )
   );
@@ -222,7 +235,7 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
   posts.map((post) => {
     if (Array.isArray(post.tags)) {
       post.tags.map((tag) => {
-        tags[tag?.slug] = tag;
+        tags[ tag?.slug ] = tag;
       });
     }
   });
@@ -233,7 +246,7 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
       {
         params: { tag: tagSlug, blog: TAG_BASE || undefined },
         pageSize: blogPostsPerPage,
-        props: { tag: tags[tagSlug] },
+        props: { tag: tags[ tagSlug ] },
       }
     )
   );
@@ -269,7 +282,7 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
   const selectedPosts: Post[] = [];
   let i = 0;
   while (selectedPosts.length < maxResults && i < postsWithScores.length) {
-    selectedPosts.push(postsWithScores[i].post);
+    selectedPosts.push(postsWithScores[ i ].post);
     i++;
   }
 
