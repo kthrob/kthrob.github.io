@@ -19,11 +19,12 @@ export const getStaticPaths = (async () => {
   return await getStaticPathsBlogPost();
 }) satisfies GetStaticPaths;
 
+
+console.log('getStaticPaths in [...blog]/[...page].astro', getStaticPaths);
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post } = Astro.props as Props;
 
-console.log("POST param from [...blog]/[...page].astro:", post);
 const url = getCanonical(getPermalink(post.permalink, 'post'));
 const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
 

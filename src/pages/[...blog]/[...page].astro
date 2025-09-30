@@ -51,8 +51,6 @@ const blogPosts: CollectionEntry<'blogs'>[] = englishBlogEntries.sort(
 );
 
 const mostRecentPost: CollectionEntry<'blogs'> = blogPosts[0];
-
-console.log('Most recent post in [..page].astro:', mostRecentPost);
 ---
 
 <Layout metadata={metadata}>

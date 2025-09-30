@@ -5,6 +5,8 @@ import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 import { formatDate } from '@/utils/utils';
 import type { CollectionEntry } from 'astro:content';
+import { APP_BLOG } from 'promethic:config';
+import { getPermalink } from '~/utils/permalinks';
 
 const { blogEntry, blogLocale = '' } = Astro.props;
 
@@ -12,17 +14,20 @@ interface Props {
 	blogEntry: CollectionEntry<'blogs'>;
 	blogLocale?: string;
 }
+
+const link = APP_BLOG?.post?.isEnabled
+	? getPermalink(blogEntry.data.permalink, 'post')
+	: '';
+
+console.log("LINK:", link);
 ---
 
-<!-- The following anchor tag is the main container for the card.
-    It's a link to the blog post detailed page.
-    The data-astro-prefetch is an Astro specific Dynamic HTML feature,
-    which automatically prefetches the linked page to speed up navigation. -->
 <a
 	class='group relative block rounded-xl outline-hidden ring-zinc-500 transition duration-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden'
+	{/** href={link ?? 'javascript:void(0)'} */}
 	href={blogLocale && blogLocale !== 'en'
-		? `/${blogLocale}/blogs/${blogEntry.id.replace(/^fr\//, '')}`
-		: `/blogs/${blogEntry.id.replace(/^en\//, '')}`}
+		? `/${blogLocale}/blog/${blogEntry.id.replace(/^fr\//, '')}`
+		: `/${blogEntry.id.replace(/^en\//, '')}`}
 	data-astro-prefetch>
 	<!-- The container for the blog post's cover image. Uses astro:assets' Image for image source -->
 	<div
@@ -55,21 +60,20 @@ interface Props {
 							{formatDate(blogEntry.data.publishDate)}
 						</p>
 					</span>
-          </span>
-				</div>
+				</span>
 			</div>
 		</div>
-		<!-- The container for the blog post's title and description -->
-		<div class='absolute inset-x-0 bottom-0 z-10'>
-			<div class='flex h-full flex-col p-4 sm:p-6'>
-				<h3
-					class='text-balance text-lg font-bold text-neutral-50 group-hover:text-neutral-50/[.8] sm:text-3xl'>
-					{blogEntry.data.title}
-				</h3>
-				<p class='mt-2 text-pretty text-neutral-50/[.8]'>
-					{blogEntry.data.description}
-				</p>
-			</div>
+	</div>
+	<!-- The container for the blog post's title and description -->
+	<div class='absolute inset-x-0 bottom-0 z-10'>
+		<div class='flex h-full flex-col p-4 sm:p-6'>
+			<h3
+				class='text-balance text-lg font-bold text-neutral-50 group-hover:text-neutral-50/[.8] sm:text-3xl'>
+				{blogEntry.data.title}
+			</h3>
+			<p class='mt-2 text-pretty text-neutral-50/[.8]'>
+				{blogEntry.data.description}
+			</p>
 		</div>
 	</div>
 </a>
