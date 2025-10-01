@@ -1,0 +1,87 @@
+---
+import Image from '@/components/common/Image.astro';
+import PostTags from '@/components/blog/Tags.astro';
+import { getFormattedDate } from '@/utils/utils';
+import { getPermalink } from '@/utils/permalinks';
+import type { Post } from '~/types';
+
+export interface Props {
+	post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<header
+	class={post.data.image
+		? 'intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade'
+		: 'intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade'}>
+	<div
+		class='flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 sm:items-center text-text-default'>
+		<p>
+			<time
+				datetime={String(post.data.publishDate)}
+				class='inline-block'
+				>{getFormattedDate(post.data.publishDate)}</time
+			>
+			{
+				post.data.category && (
+					<>
+						&nbsp;·&nbsp;
+						<a
+							class='hover:underline inline-block'
+							href={getPermalink(
+								post.data.category.slug,
+								'category'
+							)}>
+							{post.data.category.title}
+						</a>
+					</>
+				)
+			}
+			{
+				post.data.readingTime && (
+					<>
+						&nbsp;·&nbsp;
+						<span>{post.data.readingTime}</span> min read
+					</>
+				)
+			}
+		</p>
+	</div>
+
+	<h1
+		class='max-w-3xl mx-auto text-4xl md:text-5xl font-bold leading-tighter tracking-tighter font-heading text-text-default'>
+		{post.data.title}
+	</h1>
+	<p
+		class='max-w-3xl mx-auto mt-4 mb-8 text-xl md:text-2xl text-muted dark:text-slate-400 text-justify'>
+		{post.data.excerpt}
+	</p>
+	<div class='flex flex-wrap items-center gap-2 mb-8'>
+		<span class='w-8 h-px bg-stone-200'></span>
+		<PostTags
+			tags={post.data.tags}
+			class='mr-5 rtl:mr-0 rtl:ml-5'
+		/>
+	</div>
+	{
+		post.data.image ? (
+			<Image
+				src={post.data.image}
+				class='max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700'
+				widths={[400, 900]}
+				sizes='(max-width: 900px) 400px, 900px'
+				alt={post?.data.excerpt || ''}
+				width={900}
+				height={506}
+				loading='eager'
+				decoding='async'
+			/>
+		) : (
+			<div class='max-w-3xl mx-auto px-4 sm:px-6'>
+				<div class='border-t dark:border-slate-700' />
+			</div>
+		)
+	}
+</header>
