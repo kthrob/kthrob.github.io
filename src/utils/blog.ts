@@ -194,12 +194,16 @@ export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateF
 /** */
 export const getStaticPathsBlogPost = async () => {
   if (!isBlogEnabled || !isBlogPostRouteEnabled) return [];
-  return (await fetchPosts()).flatMap((post) => ({
-    params: {
-      blog: post.permalink,
-    },
-    props: { post },
-  }));
+  return (await fetchPosts()).flatMap((post) => {
+    const idWithoutLang = post.data.permalink.replace(/^en\//, "");
+    return {
+      params: {
+        // blog: post.data.permalink,
+        blog: idWithoutLang
+      },
+      props: { post },
+    };
+  });
 };
 
 /** */

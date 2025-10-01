@@ -25,13 +25,13 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post } = Astro.props as Props;
 
-const url = getCanonical(getPermalink(post.permalink, 'post'));
-const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
+const url = getCanonical(getPermalink(post.data.permalink, 'post')); 
+const image = (await findImage(post.data.image)) as ImageMetadata | string | undefined;
 
 const metadata = merge(
   {
-    title: post.title,
-    description: post.excerpt,
+    title: post.data.title,
+    description: post.data.excerpt,
     robots: {
       index: blogPostRobots?.index,
       follow: blogPostRobots?.follow,
