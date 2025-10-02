@@ -2,11 +2,11 @@
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 import CardBlogRecent from '@/components/ui/cards/CardBlogRecent.astro';
 import Layout from '~/layouts/PageLayout.astro';
-import BlogList from '~/components/blog/BlogList.astro';
+import RecentPosts from '~/components/blog/RecentPosts.astro';
 import Insights from '~/sections/Insights.astro';
 import Headline from '~/components/blog/Headline.astro';
 import Pagination from '~/components/blog/Pagination.astro';
-import RecentPost from '~/components/blog/RecentPosts.astro';
+import FeaturedPost from '~/components/blog/FeaturedPost.astro';
 // import PostTags from "~/components/blog/Tags.astro";
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
@@ -56,12 +56,12 @@ const mostRecentPost: CollectionEntry<'blogs'> = blogPosts[0];
 <Layout metadata={metadata}>
 	<!-- <section
 		class='px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-[85rem] 2xl:max-w-full'> -->
-	<BlogList 
+	<RecentPosts 
     title="Blog"
     subTitle="Explore the latest news, tips, and insights from ScrewFast to enhance your"
     posts={page.data} 
   />
-	<RecentPost blogEntry={mostRecentPost} />
+	<FeaturedPost blogEntry={mostRecentPost} />
 	<Insights
 		title='Insights'
 		subtitle='Some stuff to know'
