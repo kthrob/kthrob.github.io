@@ -7,7 +7,6 @@ import type { Post } from '~/types';
 
 export interface Props {
 	post: Post;
-	url: string | URL;
 	id?: string;
 	isDark?: boolean;
 	classes?: { container?: string };
@@ -16,7 +15,6 @@ export interface Props {
 
 const {
 	post,
-	url,
 	id,
 	isDark = false,
 	classes = {},
@@ -34,10 +32,16 @@ const {
 		<PostHeader post={post} />
 		<div
 			class='prose prose-md lg:prose-xl dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] mb-8 prose-li:my-0 text-text-default'>
-			<slot />
+			{
+				post.data.Content ? (
+					<post.data.Content />
+				) : (
+					<Fragment set:html={post.data.content || ''} />
+				)
+			}
 		</div>
-    <PostFooter post={post} />
-    <AuthorBio post={post} />
+		<PostFooter post={post} />
+		<AuthorBio post={post} />
 	</article>
 </WidgetWrapper>
 <!-- </section> -->

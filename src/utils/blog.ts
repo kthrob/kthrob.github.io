@@ -118,8 +118,8 @@ const load = async (): Promise<Array<Post>> => {
   const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedPosts))
-    .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
-    .filter((post) => !post.draft);
+    .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+    .filter((post) => !post.data.draft);
 
   return results;
 };
@@ -157,7 +157,7 @@ export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<Post
   const posts = await fetchPosts();
 
   return slugs.reduce((r: Array<Post>, slug: string) => {
-    posts.some((post: Post) => slug === post.slug && r.push(post));
+    posts.some((post: Post) => slug === post.data.slug && r.push(post));
     return r;
   }, []);
 };
@@ -213,14 +213,14 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
   const posts = await fetchPosts();
   const categories = {};
   posts.map((post) => {
-    if (post.category?.slug) {
-      categories[ post.category?.slug ] = post.category;
+    if (post.data.category?.slug) {
+      categories[ post.data.category?.slug ] = post.data.category;
     }
   });
 
   return Array.from(Object.keys(categories)).flatMap((categorySlug) =>
     paginate(
-      posts.filter((post) => post.category?.slug && categorySlug === post.category?.slug),
+      posts.filter((post) => post.data.category?.slug && categorySlug === post.data.category?.slug),
       {
         params: { category: categorySlug, blog: CATEGORY_BASE || undefined },
         pageSize: blogPostsPerPage,
@@ -237,8 +237,8 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
   const posts = await fetchPosts();
   const tags = {};
   posts.map((post) => {
-    if (Array.isArray(post.tags)) {
-      post.tags.map((tag) => {
+    if (Array.isArray(post.data.tags)) {
+      post.data.tags.map((tag) => {
         tags[ tag?.slug ] = tag;
       });
     }
@@ -246,7 +246,7 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 
   return Array.from(Object.keys(tags)).flatMap((tagSlug) =>
     paginate(
-      posts.filter((post) => Array.isArray(post.tags) && post.tags.find((elem) => elem.slug === tagSlug)),
+      posts.filter((post) => Array.isArray(post.data.tags) && post.data.tags.find((elem) => elem.slug === tagSlug)),
       {
         params: { tag: tagSlug, blog: TAG_BASE || undefined },
         pageSize: blogPostsPerPage,
@@ -259,18 +259,18 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 /** */
 export async function getRelatedPosts(originalPost: Post, maxResults: number = 4): Promise<Post[]> {
   const allPosts = await fetchPosts();
-  const originalTagsSet = new Set(originalPost.tags ? originalPost.tags.map((tag) => tag.slug) : []);
+  const originalTagsSet = new Set(originalPost.data.tags ? originalPost.data.tags.map((tag) => tag.slug) : []);
 
   const postsWithScores = allPosts.reduce((acc: { post: Post; score: number }[], iteratedPost: Post) => {
-    if (iteratedPost.slug === originalPost.slug) return acc;
+    if (iteratedPost.data.slug === originalPost.data.slug) return acc;
 
     let score = 0;
-    if (iteratedPost.category && originalPost.category && iteratedPost.category.slug === originalPost.category.slug) {
+    if (iteratedPost.data.category && originalPost.data.category && iteratedPost.data.category.slug === originalPost.data.category.slug) {
       score += 5;
     }
 
-    if (iteratedPost.tags) {
-      iteratedPost.tags.forEach((tag) => {
+    if (iteratedPost.data.tags) {
+      iteratedPost.data.tags.forEach((tag) => {
         if (originalTagsSet.has(tag.slug)) {
           score += 1;
         }

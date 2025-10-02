@@ -12,7 +12,9 @@ import { getBlogPermalink } from '~/utils/permalinks';
 
 const { post } = Astro.props;
 
-const relatedPosts = post.tags ? await getRelatedPosts(post, 4) : [];
+const relatedPosts = post.data.tags ? await getRelatedPosts(post, 4) : [];
+
+console.log("relatedPosts:", relatedPosts);
 ---
 
 {

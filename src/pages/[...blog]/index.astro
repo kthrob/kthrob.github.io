@@ -16,41 +16,52 @@ import RelatedPosts from '~/components/blog/RelatedPosts.astro';
 export const prerender = true;
 
 export const getStaticPaths = (async () => {
-  return await getStaticPathsBlogPost();
+	return await getStaticPathsBlogPost();
 }) satisfies GetStaticPaths;
 
-
-console.log('getStaticPaths in [...blog]/[...page].astro', getStaticPaths);
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post } = Astro.props as Props;
 
-const url = getCanonical(getPermalink(post.data.permalink, 'post')); 
-const image = (await findImage(post.data.image)) as ImageMetadata | string | undefined;
+const url = getCanonical(getPermalink(post.data.permalink, 'post'));
+const image = (await findImage(post.data.image)) as
+	| ImageMetadata
+	| string
+	| undefined;
 
 const metadata = merge(
-  {
-    title: post.data.title,
-    description: post.data.excerpt,
-    robots: {
-      index: blogPostRobots?.index,
-      follow: blogPostRobots?.follow,
-    },
-    openGraph: {
-      type: 'article',
-      ...(image
-        ? { images: [{ url: image, width: (image as ImageMetadata)?.width, height: (image as ImageMetadata)?.height }] }
-        : {}),
-    },
-  },
-  { ...(post?.metadata ? { ...post.metadata, canonical: post.metadata?.canonical || url } : {}) }
+	{
+		title: post.data.title,
+		description: post.data.excerpt,
+		robots: {
+			index: blogPostRobots?.index,
+			follow: blogPostRobots?.follow
+		},
+		openGraph: {
+			type: 'article',
+			...(image
+				? {
+						images: [
+							{
+								url: image,
+								width: (image as ImageMetadata)?.width,
+								height: (image as ImageMetadata)?.height
+							}
+						]
+					}
+				: {})
+		}
+	},
+	{
+		...(post?.metadata
+			? { ...post.metadata, canonical: post.metadata?.canonical || url }
+			: {})
+	}
 ) as MetaData;
 ---
 
 <Layout metadata={metadata}>
-  <SinglePost post={{ ...post, image: image }} url={url}>
-    {post.data.Content ? <post.data.Content /> : <Fragment set:html={post.data.content || ''} />}
-  </SinglePost>
-  <ToBlogLink />
-  <RelatedPosts post={post} />
+	<SinglePost post={{ ...post }} />
+	<ToBlogLink />
+	<RelatedPosts post={post} />
 </Layout>
