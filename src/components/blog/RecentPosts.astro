@@ -36,7 +36,7 @@ const blogPosts: CollectionEntry<'blogs'>[] = englishBlogEntries.sort(
 		b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
 
-const mostRecentPosts: CollectionEntry<'blogs'> = blogPosts.slice(0, 2);
+const mostRecentPosts: CollectionEntry<'blogs'>[] = blogPosts.slice(0, 2);
 ---
 
 <WidgetWrapper
