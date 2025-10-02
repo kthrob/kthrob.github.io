@@ -12,9 +12,9 @@ export interface Props {
 }
 
 const { post } = Astro.props;
-const image = await findImage(post.image);
+const image = await findImage(post.data.image);
 
-const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
+const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.data.permalink, 'post') : '';
 ---
 
 <article
@@ -27,11 +27,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
           <a href={link}>
             <Image
               src={image}
-              class="w-full md:h-full rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+              class="w-full md:h-full rounded-md shadow-lg bg-gray-400 dark:bg-slate-700"
               widths={[400, 900]}
               width={400}
               sizes="(max-width: 900px) 400px, 900px"
-              alt={post.title}
+              alt={post.data.cardImageAlt}
               aspectRatio="16:9"
               layout="cover"
               loading="lazy"
@@ -41,11 +41,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
         ) : (
           <Image
             src={image}
-            class="w-full md:h-full rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+            class="w-full md:h-full rounded-md shadow-lg bg-gray-400 dark:bg-slate-700"
             widths={[400, 900]}
             width={400}
             sizes="(max-width: 900px) 400px, 900px"
-            alt={post.title}
+            alt={post.data.cardImageAlt}
             aspectRatio="16:9"
             layout="cover"
             loading="lazy"
@@ -59,13 +59,13 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     {
       link ? (
         <a class="inline-block hover:text-primary dark:hover:text-blue-700 transition ease-in duration-200" href={link}>
-          {post.title}
+          {post.data.title}
         </a>
       ) : (
-        post.title
+        post.data.title
       )
     }
   </h3>
 
-  <p class="text-muted dark:text-slate-400 text-lg">{post.excerpt}</p>
+  <p class="text-muted dark:text-slate-400 text-lg">{post.data.excerpt}</p>
 </article>
