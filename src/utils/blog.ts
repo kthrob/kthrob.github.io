@@ -265,7 +265,8 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
     if (iteratedPost.data.slug === originalPost.data.slug) return acc;
 
     let score = 0;
-    if (iteratedPost.data.category && originalPost.data.category && iteratedPost.data.category.slug === originalPost.data.category.slug) {
+
+    if (iteratedPost.data.category && originalPost.data.category && iteratedPost.data.category === originalPost.data.category) {
       score += 5;
     }
 
