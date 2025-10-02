@@ -1,0 +1,41 @@
+---
+import AvatarBlogLarge from '@/components/ui/avatars/AvatarBlogLarge.astro';
+import SocialShare from '@/components/common/SocialShare.astro';
+import type { Post } from '~/types';
+
+export interface Props {
+	post: Post;
+}
+const { post } = Astro.props;
+---
+
+<div
+	class='mx-auto max-w-3xl mt-8 flex flex-col sm:flex-row gap-8 border-t border-slate-200 pt-10'>
+	{
+		post.data.author && (
+			<>
+				<AvatarBlogLarge blogEntry={post} />
+				<div class='flex-1 flex flex-col gap-4 min-w-0'>
+					<div>
+						<h2 class='text-2xl text-text-default mb-2'>
+							{post.data.author}
+						</h2>
+						<p class='font-mono text-sm tracking-tight text-text-default'>
+							Designer & Developer
+						</p>
+					</div>
+          <p class='text-text-default leading-relaxed'>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            euismod, nunc utltricies fermentum, nunc nisl aliquam
+            nunc, eget aliquam nisl nunc euismod nunc. Sed euismod,
+            nunc utltricies fermentum, nunc nisl aliquam nunc, eget
+            aliquam nisl nunc euismod nunc.
+          </p>
+          <div class='pt-3'>
+            <SocialShare />
+          </div>
+				</div>
+			</>
+		)
+	}
+</div>

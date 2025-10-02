@@ -1,0 +1,28 @@
+---
+import AvatarBlogLarge from '@/components/ui/avatars/AvatarBlogLarge.astro';
+import Bookmark from '@/components/ui/buttons/Bookmark.astro';
+import PostFeedback from '@/components/ui/feedback/PostFeedback.astro';
+import SocialShare from '@/components/ui/buttons/SocialShare_Custom.astro';
+import type { Post } from '~/types';
+
+export interface Props {
+	post: Post;
+}
+const { post } = Astro.props;
+---
+
+<div
+	class='mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row'>
+	<Bookmark />
+	<SocialShare pageTitle={post.data.title} />
+	<!-- <SocialShare
+				url={url}
+				text={post.data.title}
+				class='mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600'
+			/> -->
+	<PostFeedback
+		title='Was this post helpful?'
+		firstChoice='Yes'
+		secondChoice='No'
+	/>
+</div>
